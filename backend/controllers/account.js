@@ -76,4 +76,11 @@ const updateAccount = async (req, res) => {
   res.status(200).json(req.body)
 }
 
-module.exports = { signupUser, loginUser, updateAccount, getAccount }
+const getActiveUsers = async(req, res) => {
+
+  activeUsers = {'active_users': ['a', 'b', 'c', 'd']}
+  res.status(200).json(activeUsers)
+}
+
+module.exports = { signupUser, loginUser, updateAccount, getAccount,
+getActiveUsers }

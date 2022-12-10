@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react"
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import { useAuthContext } from '../hooks/useAuthContext'
+import OrderPlacement from "./OrderPlacement"
 
 
 const ShopMenu = ({shop_id}) => {
   const {user} = useAuthContext()
-  const [showActiveUsers, setShowActiveUsers] = useState(false)
   const [showPlaceOrder, setShowPlaceOrder] = useState(false)
   const [shopData, setShopData] = useState('')
-  const [menuOrderData, setMenuOrderData] = useState('')
   const {menuOrderDataContext, dispatch} = useWorkoutsContext()
 
 
@@ -33,8 +32,9 @@ const ShopMenu = ({shop_id}) => {
       return {}
     }
     for(let k in shopData["menu"]){
-      if(k.item_id == menu_item_id){
-        return k
+      const menu = shopData["menu"][k]
+      if(menu.item_id == menu_item_id){
+        return menu
       }
     }
     return {}
@@ -52,8 +52,16 @@ const ShopMenu = ({shop_id}) => {
       return
     }
     m[item_id]['qty'] += qty
-    setMenuOrderData(m)
+    
     dispatch({type: 'SET_MENU_DATA', payload: m})
+  }
+
+  const handleClick = () => {
+    setShowPlaceOrder(true)
+  }
+
+  if(showPlaceOrder){
+    return <OrderPlacement/>
   }
 
   if(shopData){
@@ -67,12 +75,13 @@ const ShopMenu = ({shop_id}) => {
               <p className="col-sm-3">Close Time: {shopData.shop_close}</p>
             </div>
             <div>
-              <button>Place Order</button>
+              <button onClick={handleClick}>Place Order</button>
             </div>
           </div>          
           <div>
+          <table>
           {shopData.menu && shopData.menu.map((menu_item) => (
-            <table className="shopcards-details flexbox-container">
+            <tbody className="shopcards-details flexbox-container" style={{width: "100%"}}>
               <tbody key={menu_item.item_id} style={{width: "100%"}}>
                 <td style={{width: "50%"}}>
                   <div>
@@ -91,8 +100,9 @@ const ShopMenu = ({shop_id}) => {
                   <button onClick={updateItemQuantity.bind(this, menu_item.item_id, -1)}>-</button>
                 </td>
               </tbody>
-            </table>
+            </tbody>
           ))}
+          </table>
         </div>
       </div>
     )
