@@ -1,18 +1,10 @@
 import { createContext, useReducer } from 'react'
 
-export const WorkoutsContext = createContext()
+export const ActiveUsersContext = createContext()
 
-export const workoutsReducer = (state, action) => {
+export const activeUserReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_SHOPS': 
-      return {
-        shops: action.payload
-      }
-    case 'SET_MENU_DATA':
-      return {
-        menuOrderDataContext: action.payload,
-        
-      }
+    
     case 'SET_ACTIVE_USERS':
       return {
         activeUsersDataContext: action.payload
@@ -22,15 +14,14 @@ export const workoutsReducer = (state, action) => {
   }
 }
 
-export const WorkoutsContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(workoutsReducer, {
-    shops: null,
-    shop: null
+export const ActiveUserContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(activeUserReducer, {
+    shops_n:null
   })
 
   return (
-    <WorkoutsContext.Provider value={{...state, dispatch}}>
+    <ActiveUsersContext.Provider value={{...state, dispatch}}>
       { children }
-    </WorkoutsContext.Provider>
+    </ActiveUsersContext.Provider>
   )
 }

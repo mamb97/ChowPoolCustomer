@@ -58,6 +58,9 @@ const ShopMenu = ({shop_id}) => {
 
   const handleClick = () => {
     setShowPlaceOrder(true)
+    let {menu, ...shopInfo} = shopData
+    dispatch({type: 'SET_MENU_DATA', 
+              payload: {...menuOrderDataContext, 'shopInfo': shopInfo}})
   }
 
   if(showPlaceOrder){

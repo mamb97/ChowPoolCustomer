@@ -77,10 +77,24 @@ const updateAccount = async (req, res) => {
 }
 
 const getActiveUsers = async(req, res) => {
-
-  activeUsers = {'active_users': ['a', 'b', 'c', 'd']}
+  // Don't return any customer list if the order_creation_date is more than 10 minutes from now. 
+  const shop_id = req.params.shop_id
+  const activeUsers = [{'customer_id': 1, 'customer_name': 'a', 'status': 'new'},
+  {'customer_id': 2, 'customer_name': 'b', 'status': 'new'}, 
+  {'customer_id': 3, 'customer_name': 'c', 'status': 'new'},
+  {'customer_id': 4, 'customer_name': 'd', 'status': 'new'}]
   res.status(200).json(activeUsers)
 }
 
+const UserPickupStatus = async(req, res) => {
+
+  // Fetch the status but if the response is pending then keep checking. After 180 seconds update the status to
+  // reject
+  const customer_id = req.params.user_id
+  console.log("Customer ID " + customer_id)
+  const user_status = {"customer_id": customer_id, "status": "rejected", "customer_name": "John Doe"}
+  res.status(200).json(user_status)
+}
+
 module.exports = { signupUser, loginUser, updateAccount, getAccount,
-getActiveUsers }
+getActiveUsers, UserPickupStatus }

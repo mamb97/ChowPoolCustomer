@@ -11,12 +11,11 @@ export const workoutsReducer = (state, action) => {
     case 'SET_MENU_DATA':
       return {
         menuOrderDataContext: action.payload,
-        
       }
-    case 'SET_ACTIVE_USERS':
-      return {
-        activeUsersDataContext: action.payload
-      }
+    // case 'SET_ACTIVE_USERS':
+    //   return {
+    //     activeUsersDataContext: action.payload
+    //   }
     default:
       return state
   }
@@ -24,8 +23,7 @@ export const workoutsReducer = (state, action) => {
 
 export const WorkoutsContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(workoutsReducer, {
-    shops: null,
-    shop: null
+    shops: null
   })
 
   return (
