@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 
-export const Timer = ({message, mins, sec}) => {
-    const initialMinute = mins
-    const initialSeconds = sec;
+export const PendingTimer = ({message}) => {
+    const initialMinute = 2
+    const initialSeconds = 30;
     const [ minutes, setMinutes ] = useState(initialMinute);
     const [seconds, setSeconds ] =  useState(initialSeconds);
     useEffect(()=>{

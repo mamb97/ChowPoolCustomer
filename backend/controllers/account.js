@@ -87,11 +87,10 @@ const getActiveUsers = async(req, res) => {
 }
 
 const UserPickupStatus = async(req, res) => {
-
-  // Fetch the status but if the response is pending then keep checking. After 180 seconds update the status to
-  // reject
   const customer_id = req.params.user_id
   console.log("Customer ID " + customer_id)
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
   const user_status = {"customer_id": customer_id, "status": "rejected", "customer_name": "John Doe"}
   res.status(200).json(user_status)
 }

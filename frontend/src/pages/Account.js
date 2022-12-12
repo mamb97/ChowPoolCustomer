@@ -21,7 +21,7 @@ const Account = () => {
 
   useEffect(() => {
     async function fetchData(){
-    const response = await fetch('http://localhost:4000/api/account/', {
+    const response = await fetch('/api/account/', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${user.token}`

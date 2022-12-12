@@ -12,10 +12,7 @@ const OrderPlacement = () => {
   const [orderTotal, setOrderTotal] = useState(0)
   const [orderConfirmationID, setOrderConfirmationID] = useState('')
   const [orderSummary, setOrderSummary] = useState(false)
-
-  const generateOrderConfirmationID = () => {
-    setOrderConfirmationID('12345')
-  }
+  const [isLoading, setIsLoading] = useState(false)
 
   const getOrderInfo = () => {
     if(!menuOrderDataContext){
@@ -36,28 +33,28 @@ const OrderPlacement = () => {
 
   useEffect(() => {
     getOrderInfo()
-    generateOrderConfirmationID()
   }, [])
 
   const handleOrderConfirmation = () => {
+    setIsLoading(true)
     if(!user){
+      setIsLoading(false)
       return
     }
     const createOrder = async () => {
-      const response = await fetch('http://localhost:4000/api/order/create', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}`},
-      body: JSON.stringify({ ...orderSummary, orderConfirmationID, orderTotal, ...menuOrderDataContext["shopInfo"]})
-    })
-    const json = await response.json()
-    console.log(json)
-    if (response.ok) {
-      
-      // update the auth context
-      dispatch({type: 'SET_MENU_DATA', payload: {...menuOrderDataContext, "orderInfo": json}})
-      setShowActiveUsers(true)
+      const response = await fetch('/api/order/create', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}`},
+        body: JSON.stringify({ ...orderSummary, orderTotal, ...menuOrderDataContext["shopInfo"]})
+      })
+      const json = await response.json()
+      if (response.ok) {
+        setIsLoading(false)
+        dispatch({type: 'SET_MENU_DATA', payload: {...menuOrderDataContext, "orderInfo": json}})
+        setOrderConfirmationID(json.orderConfirmationID)
+        setShowActiveUsers(true)
 
-      }
+        }
     }
     createOrder()
   }
@@ -73,7 +70,7 @@ const OrderPlacement = () => {
         </div>
         <div>
           <Timer message="You could request any of the other users at the restuarant to pickup your order 
-                    within 10 minutes."/>
+                    within 10 minutes." mins={10} sec={0}/>
           <ActiveUsers/>
         </div>
       </div>
@@ -83,16 +80,7 @@ const OrderPlacement = () => {
     return (
       <div className="order-placement-form">
         <div>
-          <p><strong>Order Confirmation ID:</strong> {orderConfirmationID}</p>
           <p><strong>Order Total:</strong> ${orderTotal}</p>
-          {/* <select 
-            required
-            onChange={(e) => setOrderPickupType(e.target.value)} 
-            value={orderPickupType} >
-            
-            <option value="self">Self</option>
-            <option value="fellow_customer">Fellow Customer</option>
-          </select> */}
         </div>
         <div className="flexbox-container">
           <div className="shopcards-details order-summary">
@@ -106,14 +94,9 @@ const OrderPlacement = () => {
               </tbody>
             ))}
             </table>
-          </div>
-          <div>
-          
+          </div>          
         </div>
-          {/* Active Users View */ }
-          
-        </div>
-        <button onClick={handleOrderConfirmation}>Confirm Order</button>
+        <button onClick={handleOrderConfirmation} disabled={isLoading}>Confirm Order</button>
       </div>
     )
   }

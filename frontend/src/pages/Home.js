@@ -12,7 +12,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchShops = async () => {
-      const response = await fetch('http://localhost:4000/api/shops', {
+      const response = await fetch('/api/shops', {
         headers: {'Authorization': `Bearer ${user.token}`},
       })
       const json = await response.json()

@@ -3,7 +3,8 @@ const express = require('express')
 // controller functions
 const { updateAccount, getAccount, getActiveUsers, UserPickupStatus } = require('../controllers/account')
 const {getShops, getShopMenu} = require('../controllers/shop')
-const {getOrders, getOrderDetails, createOrder, updateOrder} = require('../controllers/order')
+const {getOrders, getOrderDetails, createOrder, updateOrderDeliveryType, 
+    updateOrderStatus, getDeliveries} = require('../controllers/order')
 
 const requireAuth = require('../middleware/requireAuth')
 
@@ -24,7 +25,10 @@ router.post('/user_pickup_status', UserPickupStatus)
 
 router.get('/orders', getOrders)
 router.get('/order/:id', getOrderDetails)
-router.post('/order/create/', createOrder)
-router.post('/order/update/:id', updateOrder)
+router.get('/deliveries', getDeliveries)
+router.post('/order/create', createOrder)
+router.post('/order/update_delivery_type', updateOrderDeliveryType)
+router.post('/order/update_order_status', updateOrderStatus)
+
 
 module.exports = router
