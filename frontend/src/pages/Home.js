@@ -45,9 +45,10 @@ const Home = () => {
   else {
     return (
       <div className="home">
+        <div/>
         <div>
           {shops && shops.map((shop) => (
-            <div>
+            <div className="shopcards-details" style={{float: "center"}}>
               <ShopLists key={shop._id} shops_list={shop} />
               <button onClick={handleShowMenuClick.bind(this, shop._id)}>View Menu</button>
             </div>

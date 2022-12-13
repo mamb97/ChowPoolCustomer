@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import { useAuthContext } from '../hooks/useAuthContext'
+import { Link } from 'react-router-dom'
+
 
 import ActiveUsers from './ActiveUsers';
 import {Timer} from '../hooks/useTimer'
@@ -64,7 +66,7 @@ const OrderPlacement = () => {
       <div>
         <div className="shopcards-details order-summary-header">
             <p><strong>Your order is now placed!!</strong></p>
-            <p>Track your Order here ADD LINK TO ORDER PAGE </p> 
+            <p>Track your Order <Link className="btn btn-link" to={`/order/${orderConfirmationID}`}>Here</Link></p> 
             <p><strong>Order Confirmation ID:</strong> {orderConfirmationID}</p>
             <p><strong>Order Total:</strong> ${orderTotal}</p>
         </div>

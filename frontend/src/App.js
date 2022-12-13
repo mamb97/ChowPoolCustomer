@@ -6,8 +6,12 @@ import "./App.css";
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import NavbarComp from './components/Navbar'
-import Account from './pages/Account';
+import Account from './pages/Account'
+import Order from './pages/Order'
+import OrderDetails from './pages/OrderDetails'; 
+import {Deliveries, DeliveryDetails} from './pages/Deliveries';
+
+import NavbarComp from './components/Navbar';
 
 
 function App() {
@@ -16,7 +20,10 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <div>
         <NavbarComp />
+        
+        </div>
         <div className="pages">
           <Routes>
             <Route 
@@ -34,6 +41,22 @@ function App() {
             <Route 
               path="/account" 
               element={user ? <Account /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/orders" 
+              element={user ? <Order /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/order/:id" 
+              element={user ? <OrderDetails /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/deliveries" 
+              element={user ? <Deliveries /> : <Navigate to="/login" />} 
+            />
+            <Route 
+              path="/delivery/:id" 
+              element={user ? <DeliveryDetails /> : <Navigate to="/login" />} 
             />
           </Routes>
         </div>

@@ -15,13 +15,16 @@ const Navbar = () => {
   const homeButtonClick = () => {
     window.location.reload();
   }
-
+  
   return (
     <header>
+      <div/>
       <div className="container">
-        <Link to="/" onClick={homeButtonClick}>
-          <h1>ChowPool</h1>
-        </Link>
+        <div>
+          <Link to="/" onClick={homeButtonClick}>
+            <h2>ChowPool</h2>
+          </Link>
+        </div>
         <nav>
           {!user && (
             <div>
@@ -32,16 +35,20 @@ const Navbar = () => {
           {user && (
             <div>
               <Link to="/account">Account</Link>
-              <Link to="/orders/self">Orders</Link>
-              <Link to="/orders/others">Deliveries</Link>
-              <div>
-              <span>{user.email}</span>
-              <button onClick={handleClick}>Log out</button>
-            </div>
+              <Link to="/orders">Orders</Link>
+              <Link to="/deliveries">Deliveries</Link>
+              
             </div>
           )}
         </nav>
       </div>
+      {user && (
+      <div className="container">
+        <nav><span>{user.email}</span></nav>
+        <nav><button onClick={handleClick}>Log out</button></nav>
+      </div> 
+      )}
+      <div/>
     </header>
   )
 }

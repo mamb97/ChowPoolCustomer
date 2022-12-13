@@ -9,12 +9,11 @@ const ShopLists = ({ shops_list }) => {
   const { user } = useAuthContext()
 
   return (
-    <div className="shopcards-details">
+    <div>
       <h4>{shops_list.shop_img}</h4>
       <p><strong>Shop Name : </strong>{shops_list.shop_name}</p>
       <p><strong>Shop Open: </strong>{shops_list.shop_open}</p>
       <p><strong>Shop Close: </strong>{shops_list.shop_close}</p>
-      
     </div>
   )
 }
