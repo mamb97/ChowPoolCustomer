@@ -10,7 +10,7 @@ export const useSignup = () => {
     setIsLoading(true)
     setError(null)
     
-    const response = await fetch('/api/signup', {
+    const response = await fetch('/api/shop/signup', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, password, name, phone, unitNumber, streetAddress, city, state, zipcode })
@@ -23,7 +23,7 @@ export const useSignup = () => {
     }
     if (response.ok) {
       // save the user to local storage
-      localStorage.setItem('customer', JSON.stringify(json))
+      localStorage.setItem('shop', JSON.stringify(json))
 
       // update the auth context
       dispatch({type: 'LOGIN', payload: json})

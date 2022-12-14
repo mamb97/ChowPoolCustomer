@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useSignup } from "../hooks/useSignup"
 
-
 const Signup = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -12,18 +11,26 @@ const Signup = () => {
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [zipcode, setZipcode] = useState('')
+  const [openHours, setOpenHours] = useState(null)
+  const [u, setU] = useState(false)
+  const [m, setM] = useState(false)
+  const [t, setT] = useState(false)
+  const [w, setW] = useState(false)
+  const [r, setR] = useState(false)
+  const [f, setF] = useState(false)
+  const [s, setS] = useState(false)
   const {signup, error, isLoading} = useSignup()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    await signup(email, password, name, phone, unitNumber, streetAddress, city, state, zipcode)
+    await signup(email, password, name, phone, unitNumber, streetAddress, city, state, zipcode, openHours)
   }
 
   return (
     <form className="signup" onSubmit={handleSubmit}>
       <h3>Sign Up</h3>
-      <label>Name:</label>
+      <label>Shop Name:</label>
       <input 
         type="text"
         onChange={(e) => setName(e.target.value)} 
@@ -138,6 +145,52 @@ const Signup = () => {
         value={zipcode} 
         required
       />
+      <label>OpenHours:</label>
+      <input 
+        type="text"
+        onChange={(e) => setOpenHours(e.target.value)} 
+        value={openHours} 
+        required
+      />
+      <label>OpenDays:</label>
+      <div className="flexbox-container">
+        <label>
+          <input type="checkbox"
+            defaultChecked={m}
+            onChange={(e) => setM(e.target.value)}/>Monday
+        </label>
+        <label>
+          <input type="checkbox"
+            defaultChecked={t}
+            onChange={(e) => setT(e.target.value)}/>Tuesday
+        </label>
+        <label>
+          <input type="checkbox"
+            defaultChecked={w}
+            onChange={(e) => setW(e.target.value)}/>Wednesday
+        </label>
+        <label>
+          <input type="checkbox"
+            defaultChecked={r}
+            onChange={(e) => setR(e.target.value)}/>Thursday
+        </label>
+        <label>
+          <input type="checkbox"
+            defaultChecked={f}
+            onChange={(e) => setF(e.target.value)}/>Friday
+        </label>
+        <label>
+          <input type="checkbox"
+            defaultChecked={s}
+            onChange={(e) => setS(e.target.value)}/>Saturday
+        </label>
+        <label>
+          <input type="checkbox"
+            defaultChecked={u}
+            onChange={(e) => setU(e.target.value)}/>Sunday
+        </label>
+      </div>
+      
       
       <button disabled={isLoading}>Sign up</button>
       {error && <div className="error">{error}</div>}

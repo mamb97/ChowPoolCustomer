@@ -16,11 +16,12 @@ const customerSchema = new Schema({
     required: true
   },
   city: {type: String, required: true},
-  street: {type: String, required: true},
-  houseNumber: {type: String, required: true},
+  streetAddress: {type: String, required: true},
   unitNumber: String,
   state: String,
   zipcode: {type: String, required: true},
+  lat: {type: Number, required: true},
+  long: {type: Number, required: true},
   phone: {
     type: String,
     required: true
@@ -37,9 +38,8 @@ const customerSchema = new Schema({
 })
 
 // static signup method
-customerSchema.statics.signup = async function(email, password, name, 
-  phone, unitNumber, houseNumber, street, city, state, zipcode, 
-  delivery_optout) {
+customerSchema.statics.signup = async function(email, password, name, phone, unitNumber, streetAddress, 
+  city, state, zipcode, coordinates) {
 
   // validation
   if (!email || !password) {
@@ -62,7 +62,7 @@ customerSchema.statics.signup = async function(email, password, name,
   const hash = await bcrypt.hash(password, salt)
 
   const customer = await this.create({ email, password: hash, name, phone, 
-    unitNumber, houseNumber, street, city, state, zipcode, delivery_optout })
+    unitNumber, streetAddress, city, state, zipcode, ...coordinates})
 
   return customer
 }

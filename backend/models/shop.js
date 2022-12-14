@@ -4,7 +4,7 @@ const validator = require('validator')
 
 const Schema = mongoose.Schema
 
-const customerSchema = new Schema({
+const shopSchema = new Schema({
   name: {type: String, required: true},
   email: {
     type: String,
@@ -16,30 +16,24 @@ const customerSchema = new Schema({
     required: true
   },
   city: {type: String, required: true},
-  street: {type: String, required: true},
-  houseNumber: {type: String, required: true},
+  streetAddress: {type: String, required: true},
   unitNumber: String,
   state: String,
   zipcode: {type: String, required: true},
+  lat: {type: Number, required: true},
+  long: {type: Number, required: true},
   phone: {
     type: String,
     required: true
   },
-  'delivery_optout': {
-    type: Boolean,
-    default: false
-  }, 
-  'payment_method': {
-    type: String,
-    default: 'Credit Card'
-  }
-
+  openHours: [{type: String, required: type}],
+  openDays: [{type: String, required: type}],
+  holidays: [Date]
 })
 
 // static signup method
-customerSchema.statics.signup = async function(email, password, name, 
-  phone, unitNumber, houseNumber, street, city, state, zipcode, 
-  delivery_optout) {
+shopSchema.statics.signup = async function(email, password, name, phone, unitNumber, streetAddress, 
+  city, state, zipcode, openHours, openDays, coordinates) {
 
   // validation
   if (!email || !password) {
@@ -61,34 +55,30 @@ customerSchema.statics.signup = async function(email, password, name,
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
 
-  const customer = await this.create({ email, password: hash, name, phone, 
-    unitNumber, houseNumber, street, city, state, zipcode, delivery_optout })
+  const shop = await this.create({ email, password: hash, name, phone, unitNumber, streetAddress, city, state, 
+    zipcode, openHours, openDays, ...coordinates, "holidays": []})
 
-  return customer
+  return shop
 }
 
 // static login method
-customerSchema.statics.login = async function(email, password) {
+shopSchema.statics.login = async function(email, password) {
 
   if (!email || !password) {
     throw Error('All fields must be filled')
   }
 
-  const customer = await this.findOne({ email })
- 
-  if (!customer) {
+  const shop = await this.findOne({ email })
+  if (!user) {
     throw Error('Incorrect email')
   }
 
-  const match = await bcrypt.compare(password, customer.password)
+  const match = await bcrypt.compare(password, user.password)
   if (!match) {
     throw Error('Incorrect password')
   }
 
-  return customer
+  return shop
 }
 
-customerSchema.statics.getAccount = async function(customer_id) {
-  return await this.findOne({ _id: customer_id })
-}
-module.exports = mongoose.model('Customer', customerSchema)
+module.exports = mongoose.model('Shop', shopSchema)

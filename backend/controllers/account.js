@@ -1,6 +1,9 @@
 const Customer = require('../models/account')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
+const getLatLong = require('../lib/geocoding')
+const {getNearbyShops} = require('../lib/nearbyPoints')
+const Errors = require('../lib/errors')
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -23,18 +26,27 @@ const loginUser = async (req, res) => {
   }
 }
 
-// signup a user
+// signup a user - delivery_optout, payment_method
 const signupUser = async (req, res) => {
-  const {email, password, name, phone, unitNumber, houseNumber, street, city, state, zipcode} = req.body
-
+  const {email, password, name, phone, unitNumber, streetAddress, city, state, zipcode, delivery_opt_out} = req.body
   try {
-    const user = await Customer.signup(email, password, name, phone, unitNumber, houseNumber, street, city, state, zipcode)
+    const coordinates = await getLatLong(streetAddress, city, state, zipcode)
 
-    // create a token
-    const token = createToken(user._id)
+    if(coordinates === undefined){
+        const err_msg = Errors.getErrorMessage('invalid_address')
+        res.status(err_msg.status).json({error: err_msg.message})
+      }
+    else {
+      const user = await Customer.signup(email, password, name, phone, unitNumber, streetAddress, 
+        city, state, zipcode, coordinates)
 
-    res.status(200).json({email, token})
-  } catch (error) {
+      // create a token
+      const token = createToken(user._id)
+
+      res.status(200).json({email, token})
+    }
+  }
+  catch (error) {
     res.status(400).json({error: error.message})
   }
 }
