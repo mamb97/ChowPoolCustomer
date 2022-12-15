@@ -71,10 +71,8 @@ async function getLatLong(streetAddress, city, state, zipcode) {
     let coordinates;
     await geoCoder.geocode(`${streetAddress}, ${city}, ${state}, ${zipcode}`)
             .then((res) => {
-                console.log(res)
-                if(res && res[0] && (res[0].streetNumber != undefined) && (res[0].streetName != undefined)
-                    && (res[0].city != undefined) && (res[0].city === city) && (res[0].state != undefined)
-                    && (res[0].state === statesMapping[state]) && (res[0].zipcode != undefined) 
+                console.log(res);
+                if(res && res[0] && (res[0].city === city) && (res[0].state === statesMapping[state])
                     && (res[0].zipcode === zipcode)){
                         coordinates = {'lat': res[0].latitude, 'long': res[0].longitude}
                 }

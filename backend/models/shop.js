@@ -26,14 +26,14 @@ const shopSchema = new Schema({
     type: String,
     required: true
   },
-  openHours: [{type: String, required: type}],
-  openDays: [{type: String, required: type}],
-  holidays: [Date]
+  startTime: {type: String, required: true},
+  endTime: {type: String, required: true},
+  openDays: [{type: Boolean, required: true}],
 })
 
 // static signup method
 shopSchema.statics.signup = async function(email, password, name, phone, unitNumber, streetAddress, 
-  city, state, zipcode, openHours, openDays, coordinates) {
+  city, state, zipcode, startTime, endTime, openDays, coordinates) {
 
   // validation
   if (!email || !password) {
@@ -55,10 +55,8 @@ shopSchema.statics.signup = async function(email, password, name, phone, unitNum
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(password, salt)
 
-  const shop = await this.create({ email, password: hash, name, phone, unitNumber, streetAddress, city, state, 
-    zipcode, openHours, openDays, ...coordinates, "holidays": []})
-
-  return shop
+  return await this.create({ email, password: hash, name, phone, unitNumber, streetAddress, city, state,
+    zipcode, startTime, endTime, openDays, ...coordinates})
 }
 
 // static login method
@@ -69,16 +67,21 @@ shopSchema.statics.login = async function(email, password) {
   }
 
   const shop = await this.findOne({ email })
-  if (!user) {
+  if (!shop) {
     throw Error('Incorrect email')
   }
 
-  const match = await bcrypt.compare(password, user.password)
+  const match = await bcrypt.compare(password, shop.password)
   if (!match) {
     throw Error('Incorrect password')
   }
 
   return shop
+}
+
+shopSchema.statics.getAllShops = async function () {
+  const shops = await this.find()
+  console.log(shops)
 }
 
 module.exports = mongoose.model('Shop', shopSchema)

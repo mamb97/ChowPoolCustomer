@@ -52,6 +52,7 @@ header a {
   padding: 20px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+
 }
 .shopcards-details h4 {
   margin: 0 0 10px 0;
@@ -94,6 +95,7 @@ form button {
   padding: 10px;
   border-radius: 4px;
   cursor: pointer;
+
 }
 div.error {
   padding: 10px;
@@ -132,9 +134,15 @@ form.signup, form.login, form.account-details {
   padding: 20px;
   background: #fff;
   border-radius: 4px;
+
 }
 
 .flexbox-container {
   display: flex;
   flex-direction: row;
+}
+
+.menu-container {
+  display: flex;
+  flex-wrap: wrap;
 }

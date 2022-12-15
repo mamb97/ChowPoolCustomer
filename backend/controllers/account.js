@@ -1,12 +1,28 @@
 const Customer = require('../models/account')
+const CustShopMapping = require('../models/custShopMapping')
+
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const getLatLong = require('../lib/geocoding')
 const {getNearbyShops} = require('../lib/nearbyPoints')
 const Errors = require('../lib/errors')
+const Workout = require("../models/workoutModel");
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
+}
+
+const addShopEntries = async (user_id, coordinates, delete_all=false) => {
+  const shopData = await getNearbyShops(user_id, coordinates)
+  if(!shopData)
+    return
+  if(delete_all) {
+    console.log("Deleting Shop Data...")
+    await CustShopMapping.deleteMany({cust_id: user_id})
+  }
+  console.log("Inserting Shop Data...")
+  await CustShopMapping.insertMany(shopData)
+  console.log(shopData)
 }
 
 // login a user
@@ -43,6 +59,8 @@ const signupUser = async (req, res) => {
       // create a token
       const token = createToken(user._id)
 
+      addShopEntries(user._id, coordinates)
+
       res.status(200).json({email, token})
     }
   }
@@ -76,16 +94,24 @@ const updateAccount = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No valid customer'})
   }
+  const coordinates = await getLatLong(req.body.streetAddress, req.body.city, req.body.state, req.body.zipcode)
+  if(coordinates === undefined){
+    const err_msg = Errors.getErrorMessage('invalid_address')
+    res.status(err_msg.status).json({error: err_msg.message})
+    return
+  }
 
   const cust = await Customer.findOneAndUpdate(req.user._id, {
     ...req.body
   })
 
   if (!cust) {
-    return res.status(400).json({error: 'No valid customer'})
+    res.status(400).json({error: 'No valid customer'})
   }
-  
-  res.status(200).json(req.body)
+  else {
+    addShopEntries(req.user._id, coordinates, true)
+    res.status(200).json(req.body)
+  }
 }
 
 const getActiveUsers = async(req, res) => {

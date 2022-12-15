@@ -2,19 +2,21 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 
-const shopSummarySchema = new Schema({
-    shop_name: {type: String, required: true},
-    shop_open: {type: String, required: true},
-    shop_close: {type: String, required: true},
-    shop_img: {type: String, required: true}
-})
-
 const custShopMappingSchema = new Schema({
-  cust_id: {
-    type: ObjectId,
-    required: true
-  },
-  shops: [shopSummarySchema]
+    cust_id: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
+    shop_id: {
+        type: mongoose.Types.ObjectId,
+        required: true
+    },
+    dist: {type: Number, required: true},
+    shop_data: {type: String, required: true}
 })
 
-module.exports = mongoose.model('custShopMapping', custShopMappingSchema)
+custShopMappingSchema.statics.createEntries = async function(cust_id, shop_data) {
+
+}
+
+module.exports = mongoose.model('CustShopMapping', custShopMappingSchema)

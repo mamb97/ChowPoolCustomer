@@ -12,8 +12,7 @@ const Account = () => {
   const [payment_method, setPaymentMethod] = useState('')
   const [delivery_optout, setDeliveryOptOut] = useState('')
   const [unitNumber, setUnitNumber] = useState('')
-  const [houseNumber, setHouseNumber] = useState('')
-  const [street, setStreet] = useState('')
+  const [streetAddress, setStreetAddress] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [zipcode, setZipcode] = useState('')
@@ -37,8 +36,7 @@ const Account = () => {
     setPaymentMethod(json.payment_method)
     setDeliveryOptOut(json.delivery_optout)
     setUnitNumber(json.unitNumber)
-    setHouseNumber(json.houseNumber)
-    setStreet(json.street)
+    setStreetAddress(json.streetAddress)
     setCity(json.city)
     setState(json.state)
     setZipcode(json.zipcode)
@@ -50,8 +48,8 @@ const Account = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    await saveAccountDetails(email, password, name, phone, unitNumber, houseNumber, 
-      street, city, state, zipcode, delivery_optout, payment_method)
+    await saveAccountDetails(email, password, name, phone, unitNumber, streetAddress,
+      city, state, zipcode, delivery_optout, payment_method)
     
   }
 
@@ -114,20 +112,14 @@ const Account = () => {
         value={unitNumber}
         onChange={(e) => setUnitNumber(e.target.value)}
       />
-      <label>Street Number:</label>
+      <label>Street Address:</label>
       <input 
         type="text"
-        onChange={(e) => setHouseNumber(e.target.value)}
-        value={houseNumber}
+        onChange={(e) => setStreetAddress(e.target.value)}
+        value={streetAddress}
         required
       />
-      <label>Street Name:</label>
-      <input 
-        type="text"
-        onChange={(e) => setStreet(e.target.value)}
-        value={street}
-        required
-      />
+
       <label>City:</label>
       <input 
         type="text"
