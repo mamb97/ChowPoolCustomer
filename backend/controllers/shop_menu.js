@@ -1,7 +1,3 @@
-const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
-
-const Shop = require('../models/shop')
 const ShopMenu = require('../models/shopMenu')
 
 const getShopMenuData = async (req, res) => {

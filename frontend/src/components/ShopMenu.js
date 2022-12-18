@@ -21,11 +21,10 @@ const ShopMenu = ({shop_id}) => {
         setShopData(json)
       }
     }
-
-    if (user) {
+    if (user && (!menuOrderDataContext) && (!showPlaceOrder)) {
       fetchShopData()
     }
-  }, [menuOrderDataContext, dispatch])
+  }, [shopData, menuOrderDataContext])
 
   const getMenuItemData = (menu_item_id) => {
     if(!shopData){
@@ -33,7 +32,7 @@ const ShopMenu = ({shop_id}) => {
     }
     for(let k in shopData["menu"]){
       const menu = shopData["menu"][k]
-      if(menu.item_id == menu_item_id){
+      if(menu._id === menu_item_id){
         return menu
       }
     }
@@ -46,17 +45,28 @@ const ShopMenu = ({shop_id}) => {
     }
     let m = menuOrderDataContext || {}
     if(!(item_id in m)){
+      if(qty === -1){
+        return
+      }
       m[item_id] = {...getMenuItemData(item_id), 'qty': 0}
     }
-    if(m[item_id]['qty'] <=0 && qty == -1){
+    if(m[item_id]['qty'] <=0 && qty === -1){
       return
     }
     m[item_id]['qty'] += qty
-    
+    if(m[item_id]['qty'] === 0){
+      delete m[item_id];
+    }
+    if(Object.keys(m).length===0){
+      m = undefined;
+    }
     dispatch({type: 'SET_MENU_DATA', payload: m})
   }
 
   const handleClick = () => {
+    if((!menuOrderDataContext) || Object.keys(menuOrderDataContext).length===0){
+      return
+    }
     setShowPlaceOrder(true)
     let {menu, ...shopInfo} = shopData
     dispatch({type: 'SET_MENU_DATA', 
@@ -85,10 +95,10 @@ const ShopMenu = ({shop_id}) => {
           <table>
           {shopData.menu && shopData.menu.map((menu_item) => (
             <tbody className="shopcards-details flexbox-container" style={{width: "100%"}}>
-              <tbody key={menu_item.item_id} style={{width: "100%"}}>
+              <tbody style={{width: "100%"}}>
                 <td style={{width: "50%"}}>
                   <div>
-                    <p>{menu_item.item_name}</p>
+                    <h4>{menu_item.item_name}</h4>
                     <p>{menu_item.item_description}</p>
                   </div>
                 </td>
@@ -98,9 +108,9 @@ const ShopMenu = ({shop_id}) => {
                   </div>
                 </td>
                 <td style={{width: "100%"}}>
-                  <button onClick={updateItemQuantity.bind(this, menu_item.item_id, 1)}>+</button>
-                  <p>{menuOrderDataContext && menuOrderDataContext[menu_item.item_id] && menuOrderDataContext[menu_item.item_id]["qty"] || 0}</p>
-                  <button onClick={updateItemQuantity.bind(this, menu_item.item_id, -1)}>-</button>
+                  <button onClick={updateItemQuantity.bind(this, menu_item._id, 1)}>+</button>
+                  <p>{menuOrderDataContext && menuOrderDataContext[menu_item._id] && menuOrderDataContext[menu_item._id]["qty"] || 0}</p>
+                  <button onClick={updateItemQuantity.bind(this, menu_item._id, -1)}>-</button>
                 </td>
               </tbody>
             </tbody>

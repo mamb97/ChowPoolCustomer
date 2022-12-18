@@ -7,7 +7,7 @@ export const useSave = () => {
   const [isLoading, setIsLoading] = useState(null)
   const { dispatch } = useAuthContext()
 
-  const saveAccountDetails = async (email, password, name, phone, unitNumber, streetAddress,
+  const saveAccountDetails = async (email, name, phone, unitNumber, streetAddress,
     city, state, zipcode, delivery_optout, payment_method) => {
     setIsLoading(true)
     setError(null)
@@ -16,7 +16,7 @@ export const useSave = () => {
       method: 'POST',
       headers: {'Content-Type': 'application/json',
       'Authorization': `Bearer ${user.token}`},
-      body: JSON.stringify({ email, password, name, phone, unitNumber, streetAddress,
+      body: JSON.stringify({ email, name, phone, unitNumber, streetAddress,
         city, state, zipcode, delivery_optout, payment_method })
     })
     const json = await response.json()

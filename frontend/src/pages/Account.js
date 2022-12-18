@@ -7,7 +7,6 @@ const Account = () => {
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [phone, setPhone] = useState('')
   const [payment_method, setPaymentMethod] = useState('')
   const [delivery_optout, setDeliveryOptOut] = useState('')
@@ -28,10 +27,8 @@ const Account = () => {
     })
     
     const json = await response.json()
-    console.log(json)
     setName(json.name)
     setEmail(json.email)
-    setPassword(json.password)
     setPhone(json.phone)
     setPaymentMethod(json.payment_method)
     setDeliveryOptOut(json.delivery_optout)
@@ -48,7 +45,7 @@ const Account = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    await saveAccountDetails(email, password, name, phone, unitNumber, streetAddress,
+    await saveAccountDetails(email, name, phone, unitNumber, streetAddress,
       city, state, zipcode, delivery_optout, payment_method)
     
   }
@@ -69,14 +66,6 @@ const Account = () => {
         type="email"
         value={email} 
         onChange={(e) => setEmail(e.target.value)}
-        required
-        readOnly={true}
-      />
-      <label>Password:</label>
-      <input 
-        type="password"
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)}
         required
         readOnly={true}
       />

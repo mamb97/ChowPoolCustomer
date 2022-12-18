@@ -1,7 +1,8 @@
 const express = require('express')
 
 // controller functions
-const { updateAccount, getAccount, getActiveUsers, UserPickupStatus, getShops, getShopMenu } = require('../controllers/customer_account')
+const {getShops, getShopMenu} = require('../controllers/customer_menu')
+const { updateAccount, getAccount, getActiveUsers, UserPickupStatus } = require('../controllers/customer_account')
 const {getOrders, getOrderDetails, createOrder, updateOrderDeliveryType,
     updateOrderStatus, postDeliveries, postDeliveryDetails, updateDeliveryRequestAck} = require('../controllers/customer_order')
 

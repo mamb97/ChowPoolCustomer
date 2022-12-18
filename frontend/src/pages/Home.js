@@ -21,10 +21,20 @@ const ShopData = ({ shop_data }) => {
   )
 }
 
+const ShopNotAvailable = () => {
+  return (
+      <div>
+        <div className="shopcards-details">
+          <h4>Oops!! There are no open shops in the area at the moment.</h4>
+        </div>
+      </div>
+  )
+}
+
 const Home = () => {
   const {shops, dispatch} = useWorkoutsContext()
   const {user} = useAuthContext()
-  const [shopid, setShopId] = useState(0)  
+  const [shopid, setShopId] = useState(null)
 
   useEffect(() => {
     const fetchShops = async () => {
@@ -37,24 +47,28 @@ const Home = () => {
       }
     }
 
-    if (user) {
+    if (user && shopid===null) {
       fetchShops()
     }
   }, [shops])
 
   const handleShowMenuClick = (shop_id) => {
+      console.log("Button click menu", shop_id, user)
     if (!user) {
       return
     }
     setShopId(shop_id)
   }
 
-  if(shopid > 0){
+  if(shopid != null){
     return (
       <div className='shopMenu'>
         <ShopMenu key={shopid} shop_id={shopid}/>
       </div>
     )
+  }
+  else if(shops && shops.length===0){ //shops could be null or []. empty list isn't considered false
+    return <ShopNotAvailable key="no_shops_available"/>
   }
   else {
     return (
