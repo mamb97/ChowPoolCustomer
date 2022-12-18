@@ -104,7 +104,7 @@ export const Deliveries = ({delivery_id}) => {
               }
             </div>
             <DeliveryData key={order.order_id} order_data={order} />
-            {/* <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link> */}
+             <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link>
           </div>
         ))}
       </div>
@@ -116,7 +116,7 @@ export const Deliveries = ({delivery_id}) => {
               <p>Is the order delivered?</p>
               <button onClick={updateOrderStatus.bind(this, order.order_id)}>Yes</button>
             </div>
-            {/* <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link> */}
+             <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link>
           </div>
         ))}
       </div>
@@ -124,7 +124,7 @@ export const Deliveries = ({delivery_id}) => {
         {deliveryData && deliveryData["completed"].map((order) => (
           <div className="shopcards-details" style={{background: "#baffc9"}}>
             <DeliveryData key={order.order_id} order_data={order} />
-            {/* <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link> */}
+             <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link>
           </div>
         ))}
       </div>

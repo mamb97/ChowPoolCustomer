@@ -43,12 +43,10 @@ const Home = () => {
   }, [shops])
 
   const handleShowMenuClick = (shop_id) => {
-    
     if (!user) {
       return
     }
     setShopId(shop_id)
-
   }
 
   if(shopid > 0){

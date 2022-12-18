@@ -10,7 +10,6 @@ export const useSignup = () => {
                           startTime, endTime, openDays) => {
         setIsLoading(true)
         setError(null)
-        console.log(openDays, startTime, endTime)
         const response = await fetch('/api/shop/signup', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},

@@ -1,58 +1,42 @@
-import { useEffect, useState }from 'react'
+import { useEffect }from 'react'
 import { useAuthContext } from "../hooks/useAuthContext"
-
+import {useMenuContext} from "../hooks/useMenuContext"
+import MenuDetails from '../components/MenuDetails'
+import MenuForm from '../components/MenuForm'
 const Home = () => {
-  const {shops, dispatch} = useWorkoutsContext()
+  const {menu, dispatch} = useMenuContext()
   const {user} = useAuthContext()
-  const [shopid, setShopId] = useState(0)  
 
   useEffect(() => {
-    const fetchShops = async () => {
-      const response = await fetch('/api/shops', {
+    const fetchMenu = async () => {
+      console.log(user)
+      const response = await fetch('/api/shop/menu', {
         headers: {'Authorization': `Bearer ${user.token}`},
+        method: 'GET'
       })
       const json = await response.json()
+      console.log(json)
+
       if (response.ok) {
-        dispatch({type: 'SET_SHOPS', payload: json})
+        dispatch({type: 'SET_MENU', payload: json})
       }
     }
 
     if (user) {
-      fetchShops()
+      fetchMenu()
     }
-  }, [])
+  }, [dispatch, user])
 
-  const handleShowMenuClick = (shop_id) => {
-    
-    if (!user) {
-      return
-    }
-    setShopId(shop_id)
-
-  }
-
-  if(shopid > 0){
-    return (
-      <div className='shopMenu'>
-        <ShopMenu key={shopid} shop_id={shopid}/>
-      </div>
-    )
-  }
-  else {
-    return (
+  return (
       <div className="home">
-        <div/>
-        <div>
-          {shops && shops.map((shop) => (
-            <div className="shopcards-details" style={{float: "center"}}>
-              <ShopLists key={shop._id} shops_list={shop} />
-              <button onClick={handleShowMenuClick.bind(this, shop._id)}>View Menu</button>
-            </div>
+        <div className="menu-container">
+          {menu && menu.map((m) => (
+              <MenuDetails key={m._id} ind_menu={m} />
           ))}
         </div>
+        <MenuForm />
       </div>
-    )
-  }
+  )
 }
 
 export default Home

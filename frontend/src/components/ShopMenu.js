@@ -13,7 +13,7 @@ const ShopMenu = ({shop_id}) => {
 
   useEffect(() => {
     const fetchShopData = async () => {
-      const response = await fetch("/api/shop/" + shop_id, {
+      const response = await fetch("/api/shops/menu/" + shop_id, {
         headers: {'Authorization': `Bearer ${user.token}`},
       })
       const json = await response.json()

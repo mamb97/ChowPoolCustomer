@@ -4,8 +4,9 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require("cors")
 
-const custAuthRoutes = require('./routes/customer_auth')
+const userAuthRoutes = require('./routes/user_auth')
 const customerRoutes = require('./routes/customer')
+const shopRoutes = require('./routes/shop')
 
 // express app
 const app = express()
@@ -20,8 +21,9 @@ app.use((req, res, next) => {
 })
 
 // routes
-app.use('/api/', custAuthRoutes)
+app.use('/api/', userAuthRoutes)
 app.use('/api/', customerRoutes)
+app.use('/api/', shopRoutes)
 
 
 // connect to db

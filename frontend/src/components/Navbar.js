@@ -36,7 +36,6 @@ const Navbar = () => {
             <div>
               <Link to="/account">Account</Link>
               <Link to="/orders">Orders</Link>
-              <Link to="/deliveries">Deliveries</Link>
               
             </div>
           )}

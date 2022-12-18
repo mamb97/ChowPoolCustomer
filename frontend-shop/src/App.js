@@ -1,63 +1,54 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-//import { useAuthContext } from './hooks/useAuthContext'
+import { useAuthContext } from './hooks/useAuthContext'
 import "./App.css";
 
 // pages & components
-// import Home from './pages/Home'
-// import Login from './pages/Login'
+import Home from './pages/Home'
+import Login from './pages/Login'
 import Signup from './pages/Signup'
-// import Account from './pages/Account'
-// import Order from './pages/Order'
-// import OrderDetails from './pages/OrderDetails'; 
-// import {Deliveries, DeliveryDetails} from './pages/Deliveries';
+import Account from './pages/Account'
+import Order from './pages/Order'
+import OrderDetails from './pages/OrderDetails';
 
-// import NavbarComp from './components/Navbar';
+import NavbarComp from './components/Navbar';
 
 
 function App() {
-  // const { user } = useAuthContext()
-  const user = null
+  const { user } = useAuthContext()
+
   return (
     <div className="App">
       <BrowserRouter>
         <div>
-        {/* <NavbarComp /> */}
+         <NavbarComp />
         
         </div>
         <div className="pages">
           <Routes>
-            {/* <Route 
-              path="/" 
-              element={user ? <Home /> : <Navigate to="/login" />} 
+            <Route
+              path="/"
+              element={user ? <Home /> : <Navigate to="/login" />}
             />
-            <Route 
-              path="/login" 
-              element={!user ? <Login /> : <Navigate to="/" />} 
-            /> */}
+            <Route
+              path="/login"
+              element={!user ? <Login /> : <Navigate to="/" />}
+            />
             <Route 
               path="/signup" 
               element={!user ? <Signup /> : <Navigate to="/" />} 
             />
-            {/* <Route 
+            <Route
               path="/account" 
               element={user ? <Account /> : <Navigate to="/login" />} 
             />
-            <Route 
-              path="/orders" 
-              element={user ? <Order /> : <Navigate to="/login" />} 
+            <Route
+              path="/orders"
+              element={user ? <Order /> : <Navigate to="/login" />}
             />
-            <Route 
-              path="/order/:id" 
-              element={user ? <OrderDetails /> : <Navigate to="/login" />} 
+            <Route
+              path="/order/:id"
+              element={user ? <OrderDetails /> : <Navigate to="/login" />}
             />
-            <Route 
-              path="/deliveries" 
-              element={user ? <Deliveries /> : <Navigate to="/login" />} 
-            />
-            <Route 
-              path="/delivery/:id" 
-              element={user ? <DeliveryDetails /> : <Navigate to="/login" />} 
-            /> */}
           </Routes>
         </div>
       </BrowserRouter>

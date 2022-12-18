@@ -35,8 +35,8 @@ header a {
 /* homepage */
 .home {
   display: grid;
-  /* grid-template-columns: 1fr 2fr 1fr; */
-  /* gap: 100px; */
+   grid-template-columns: 3fr 1fr;
+   gap: 100px;
 }
 
 .col-two {
@@ -46,9 +46,10 @@ header a {
 }
 
 .shopcards-details {
-  background: #fff;
+  background: #a3c3f6;
+  margin: 10px 10px 10px 10px;
   border-radius: 4px;
-  margin: 20px auto;
+  /*margin: 20px auto;*/
   padding: 20px;
   position: relative;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
@@ -138,4 +139,8 @@ form.signup, form.login, form.account-details {
   display: flex;
   flex-direction: row;
   text-align: center;
+}
+
+.order-summary {
+  display: grid;
 }

@@ -1,11 +1,9 @@
 const express = require('express')
 
 // controller functions
-const { updateAccount, getAccount, getActiveUsers, UserPickupStatus } = require('../controllers/account')
-const {getShops, getShopMenu} = require('../controllers/shop')
-const {getOrders, getOrderDetails, createOrder, updateOrderDeliveryType, 
-    updateOrderStatus, postDeliveries, postDeliveryDetails, updateDeliveryRequestAck} = 
-    require('../controllers/order')
+const { updateAccount, getAccount, getActiveUsers, UserPickupStatus, getShops, getShopMenu } = require('../controllers/customer_account')
+const {getOrders, getOrderDetails, createOrder, updateOrderDeliveryType,
+    updateOrderStatus, postDeliveries, postDeliveryDetails, updateDeliveryRequestAck} = require('../controllers/customer_order')
 
 const requireAuth = require('../middleware/requireAuth')
 
@@ -19,16 +17,18 @@ router.post('/account', updateAccount)
 router.get('/account', getAccount)
 
 router.get('/shops', getShops)
-router.get('/shop/:id', getShopMenu)
+router.get('/shops/menu/:id', getShopMenu)
 
 router.get('/active_users/:shop_id', getActiveUsers)
 router.post('/user_pickup_status', UserPickupStatus)
 
 router.get('/orders', getOrders)
 router.get('/order/:id', getOrderDetails)
+
 router.post('/order/create', createOrder)
 router.post('/order/update_delivery_type', updateOrderDeliveryType)
 router.post('/order/update_order_status', updateOrderStatus)
+
 
 router.post('/deliveries', postDeliveries)
 router.post('/delivery/:id', postDeliveryDetails)
