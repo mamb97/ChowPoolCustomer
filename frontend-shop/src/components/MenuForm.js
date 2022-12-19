@@ -40,7 +40,7 @@ const MenuForm = () => {
             setItemName('')
             setItemDesc('')
             setItemPrice('')
-            setAvailability(null)
+            setAvailability(true)
             dispatch({type: 'CREATE_MENU', payload: json})
         }
     }

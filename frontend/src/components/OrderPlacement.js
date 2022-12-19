@@ -55,6 +55,7 @@ const OrderPlacement = x => {
                 setIsLoading(false)
                 dispatch({type: 'SET_MENU_DATA', payload: {...menuOrderDataContext, "orderInfo": json}})
                 setOrderConfirmationID(json.orderConfirmationID)
+                setOrderTotal(json.orderTotal)
                 setShowActiveUsers(true)
 
             }
@@ -67,16 +68,15 @@ const OrderPlacement = x => {
             <div>
                 <div className="shopcards-details order-summary-header">
                     <p><strong>Your order is now placed!!</strong></p>
-                    <p>Track your Order <Link className="btn btn-link" to={`/order/${orderConfirmationID}`}>Here</Link>
-                    </p>
+                    <Link className="btn btn-link" style={{color: "#1aac83"}} to={`/order/${orderConfirmationID}`}>Track your Order Here</Link>
                     <p><strong>Order Confirmation ID:</strong> {orderConfirmationID}</p>
                     <p><strong>Order Total:</strong> ${orderTotal}</p>
                 </div>
                 <div>
+                    <h4>Active Users!</h4>
+                    <Timer message="You could request any of the other users at the shop to pickup your order
+                    within 10 minutes." mins={10} sec={0}/>
                     <ActiveUsers/>
-                    {/*    <Timer message="You could request any of the other users at the shop to pickup your order*/}
-                    {/*within 10 minutes." mins={10} sec={0}/>*/}
-                    {/*</ActiveUsers>*/}
                 </div>
             </div>
         )

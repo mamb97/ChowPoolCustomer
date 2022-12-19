@@ -32,7 +32,7 @@ const MenuDetails = ({ ind_menu }) => {
             </div>
             <i>{ind_menu.item_description}</i>
             <p><strong>Price: </strong>${ind_menu.item_price}</p>
-            <p><strong>Is Available?: </strong>${ind_menu.availability}</p>
+            <p><strong>Available? </strong>{ind_menu.availability===true ? 'Yes': 'No'}</p>
 
         </div>
     )

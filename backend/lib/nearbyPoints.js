@@ -23,13 +23,29 @@ async function getNearbyShops (user_id, userLoc) {
 
 }
 
-async function getNearbyCustomers (shop_data, shop_id, userLoc) {
+async function getNearbyActiveCustomersByShop (active_orders, userLoc) {
     // Set the center point and the radius (in meters)
-    const center = {latitude: userLoc.lat, longitude: userLoc.long};
-    const radius = 1000; // 3 km
-    const customersData = await Customer.find()
+    const center = {latitude: userLoc[0], longitude: userLoc[1]};
+    const radius = 1000
+    let nearbyOrders = []
+    for(let idx in active_orders){
+        const o = active_orders[idx]
+        const distance = geolib.getDistance(center, {latitude: o.cust_lat,
+            longitude: o.cust_long})
+        if(distance <= radius){
+            nearbyOrders.push({'dist': distance, 'order_id': o._id, 'customer_name': o.cust_name,
+            'customer_id': o.cust_id})
+        }
+    }
+    return nearbyOrders;
 
+}
+
+async function getNearbyCustomersForShop (shop_data, shop_id, userLoc){
+    const center = {latitude: userLoc.lat, longitude: userLoc.long};
+    const customersData = await Customer.find()
     let nearbyCustData = []
+    const radius = 3000;
     for(let idx in customersData){
         const cust = customersData[idx]
         const distance = geolib.getDistance(center, {latitude: cust.lat, longitude: cust.long})
@@ -38,9 +54,7 @@ async function getNearbyCustomers (shop_data, shop_id, userLoc) {
                 'shop_data': JSON.stringify(shop_data)})
         }
     }
-
-    return nearbyCustData;
-
+    return nearbyCustData
 }
 
-module.exports = {getNearbyShops, getNearbyCustomers}
+module.exports = {getNearbyShops, getNearbyActiveCustomersByShop, getNearbyCustomersForShop}

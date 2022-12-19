@@ -121,19 +121,7 @@ const getOrderDetails = async (req, res) => {
     res.status(200).json(d)
 }
 
-const getRemainingDuration = (startDate, mins, secs) => {
-    const deadLineTime = startDate + ((mins * 60 + secs) * 1000)
-    const now = Date.parse(Date())
-    let remainingMins = 0
-    let remainingSecs = 0
-    if (now < deadLineTime) {
-        const seconds = (deadLineTime - now) / 1000;
-        console.log(seconds, now)
-        remainingMins = Math.round(seconds / 60)
-        remainingSecs = seconds % 60
-    }
-    return {'mins': remainingMins, 'secs': remainingSecs}
-}
+
 
 const postDeliveries = async (req, res) => {
     //If remainingDuration is 0, update delivery pickup request to rejected. 

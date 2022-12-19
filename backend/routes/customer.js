@@ -20,7 +20,7 @@ router.get('/account', getAccount)
 router.get('/shops', getShops)
 router.get('/shops/menu/:id', getShopMenu)
 
-router.get('/active_users/:shop_id', getActiveUsers)
+router.get('/active_users/:order_id', getActiveUsers)
 router.post('/user_pickup_status', UserPickupStatus)
 
 router.get('/orders', getOrders)

@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const getLatLong = require('../lib/geocoding')
 const Errors = require('../lib/errors')
-const {getNearbyCustomers} = require("../lib/nearbyPoints");
+const {getNearbyCustomersForShop} = require("../lib/nearbyPoints");
 const CustShopMapping = require("../models/custShopMapping");
 
 const createToken = (_id) => {
@@ -12,7 +12,7 @@ const createToken = (_id) => {
 
 // COMPLETED
 const addCustEntries = async (shop_data, shop_id, coordinates, delete_all=false) => {
-    const custData = await getNearbyCustomers(shop_data, shop_id, coordinates)
+    const custData = await getNearbyCustomersForShop(shop_data, shop_id, coordinates)
     if(!custData)
         return
     if(delete_all) {
