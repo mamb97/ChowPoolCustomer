@@ -83,7 +83,8 @@ const ShopMenu = ({shop_id}) => {
           <div className="shopcards-details">
             <h1>{shopData.shop_name}</h1>
             <p> Address: {shopData.shop_address}</p>
-            <div>
+            <p> Phone: {shopData.shop_phone}</p>
+            <div className="flexbox-container">
               <p className="col-sm-3">Open Time: {shopData.shop_open}</p>
               <p className="col-sm-3">Close Time: {shopData.shop_close}</p>
             </div>

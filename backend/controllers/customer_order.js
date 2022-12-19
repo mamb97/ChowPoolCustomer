@@ -1,6 +1,6 @@
 const Customer = require('../models/account')
-const jwt = require('jsonwebtoken')
-const mongoose = require('mongoose')
+const Orders = require('../models/order')
+const {getFormattedAddress, getRandomID} = require("../lib/utility");
 
 const states = {
     "pending": {
@@ -9,6 +9,17 @@ const states = {
         "pickup_pending": "Pickup Pending"
     },
     "completed": {"self_pickup_done": "Pickup Complete", "order_delivered": "Order Delivered"}
+}
+
+const createOrder = async (req, res) => {
+    const user_id = req.user._id
+    const confirmationID = await getRandomID();
+    const cust_info = await Customer.findById(user_id)
+    const cust_address = await getFormattedAddress(cust_info.streetAddress, cust_info.unitNumber, cust_info.city,
+        cust_info.state, cust_info.zipcode)
+    const order_details = await Orders.create_order(cust_info, cust_address, req.body.shop_info, confirmationID,
+        {order_summary:req.body.order_summary, order_total: req.body.order_total, order_status: 'order_placed', delivery_type: 'self'})
+    res.status(200).json(order_details)
 }
 
 const getOrders = async (req, res) => {
@@ -251,11 +262,6 @@ const postDeliveryDetails = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
 
 
-}
-
-const createOrder = async (req, res) => {
-    // Generate Order Confirmation ID and return it.
-    res.status(200).json({...req.body, 'orderConfirmationID': '123456'})
 }
 
 const updateOrderDeliveryType = async (req, res) => {

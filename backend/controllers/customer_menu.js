@@ -2,6 +2,8 @@ const CustShopMapping = require('../models/custShopMapping')
 const ShopMenu = require("../models/shopMenu");
 const Shop = require("../models/shop");
 
+const {getFormattedAddress} = require("../lib/utility")
+
 const isShopOpen = (open, close, openDays) => {
     const getT = (t) => {
         return t[0] * 60 + t[1];
@@ -32,7 +34,8 @@ const getShops = async (req, res) => {
                 'shop_name': shop_data.name, 'phone': shop_data.phone, 'shop_id': shops[s].shop_id,
                 'distance': Math.round(shops[s].dist / 1000, 2), 'open': shop_data.startTime,
                 'close': shop_data.endTime,
-                'address': `${shop_data.streetAddress} ${shop_data.unitNumber}, ${shop_data.city}, ${shop_data.state}, ${shop_data.zipcode}`
+                'address': await getFormattedAddress(shop_data.streetAddress, shop_data.unitNumber,
+                    shop_data.city, shop_data.state, shop_data.zipcode)
             })
         }
         res.status(200).json(shopsInfo)
@@ -47,8 +50,10 @@ const getShopMenu = async (req, res) => {
         "shop_name": shop_info.name,
         "shop_open": shop_info.startTime,
         "shop_close": shop_info.endTime,
-        "_id": shop_id,
-        "shop_address": `${shop_info.streetAddress} ${shop_info.unitNumber}, ${shop_info.city}, ${shop_info.state}, ${shop_info.zipcode}`,
+        "shop_phone": shop_info.phone,
+        "shop_id": shop_id,
+        "shop_address": await getFormattedAddress(shop_info.streetAddress, shop_info.unitNumber,
+            shop_info.city, shop_info.state, shop_info.zipcode),
         "menu": menu_info
     }
     res.status(200).json(s)
