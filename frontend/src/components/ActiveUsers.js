@@ -6,8 +6,7 @@ import {useAuthContext} from '../hooks/useAuthContext'
 import {Timer} from '../hooks/useTimer'
 import {PendingTimer} from '../hooks/usePendingTimer';
 
-
-const ActiveUsers = ({user_status}) => {
+const ActiveUsers = () => {
     const {user} = useAuthContext()
     const {menuOrderDataContext} = useWorkoutsContext()
     const {activeUsersDataContext, dispatch} = useActiveUserContext()
@@ -15,37 +14,6 @@ const ActiveUsers = ({user_status}) => {
     const [pendingUser, setPendingUser] = useState(false)
     const [isLoading, setIsLoading] = useState(null)
 
-
-    const getUserStatus = async (user_id) => {
-        console.log("UserID: " + user_id)
-        const response = await fetch('/api/user_pickup_status', {
-            headers: {'Authorization': `Bearer ${user.token}`},
-            method: 'POST',
-            body: {"pickup_user_id": user_id},
-        })
-        const res = await response.json()
-        if (response.ok) {
-            console.log(res["status"])
-            switch (res["status"]) {
-                case "accepted": {
-                    setIsLoading(false)
-
-                    setAcceptedUser(pendingUser)
-                    setPendingUser(false)
-                    updateOrder(acceptedUser)
-                    break
-                }
-                case "rejected": {
-                    // Send Push Notifications
-                    setIsLoading(false)
-
-                    window.alert("Oops!! " + pendingUser["customer_name"] + " has rejected your pickup request.")
-                    setPendingUser(false)
-                    break
-                }
-            }
-        }
-    }
 
     const updateOrder = async (delivery_customer) => {
         const response = await fetch('/api/order/update_delivery_type', {
@@ -62,9 +30,44 @@ const ActiveUsers = ({user_status}) => {
         const json = await response.json()
     }
 
-    const getActiveUsers = () => {
+    const sendRequest = async (new_cust_data) => {
+        console.log('New Cust Data', new_cust_data)
+        setIsLoading(true)
+        await setPendingUser(new_cust_data)
         const fetchData = async () => {
-            console.log(menuOrderDataContext)
+            const response = await fetch('/api/delivery/request/send', {
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(new_cust_data)
+            })
+            const res = await response.json()
+
+            if (response.ok) {
+                switch (res["status"]) {
+                    case "accepted": {
+                        setIsLoading(false)
+                        await setAcceptedUser(pendingUser)
+                        await setPendingUser(false)
+                        await updateOrder(acceptedUser)
+                        break
+                    }
+                    case "rejected": {
+                        setIsLoading(false)
+                        window.alert("Oops!! " + pendingUser["delivery_cust_name"] + " has rejected your pickup request.")
+                        await setPendingUser(false)
+                        break
+                    }
+                }
+            }
+        }
+        await fetchData()
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
             const response = await fetch('/api/active_users/' + menuOrderDataContext.orderInfo.orderID, {
                 headers: {'Authorization': `Bearer ${user.token}`},
             })
@@ -76,28 +79,13 @@ const ActiveUsers = ({user_status}) => {
                 await dispatch({type: 'SET_ACTIVE_USERS', payload: usersData})
             }
         }
-        if (!user) {
-            return
-        }
 
-        if (!(acceptedUser || pendingUser)) {
+        if (user && (!(acceptedUser || pendingUser))) {
+            console.log("ACTIVE USERS CALL")
             setIsLoading(false)
             fetchData()
         }
-        if (pendingUser) {
-            getUserStatus(pendingUser["customer_id"])
-        }
-    }
-
-    const sendRequest = (new_cust_data) => {
-        setIsLoading(true)
-        setPendingUser(new_cust_data)
-        // Add SMS here.
-    }
-
-    useEffect(() => {
-        getActiveUsers()
-    }, [activeUsersDataContext, pendingUser, dispatch])
+    }, [activeUsersDataContext, dispatch, pendingUser])
 
     if (acceptedUser) {
         return (
@@ -106,13 +94,11 @@ const ActiveUsers = ({user_status}) => {
             </div>
         )
     } else if (pendingUser) {
-        console.log(pendingUser)
-        const message = <p>Waiting for <strong>{pendingUser.customer_name}</strong> to accept your pickup request.
-            Please note, the request will be auto-rejected in 180 seconds.</p>
+        const message = <p>Waiting for <strong>{pendingUser.delivery_cust_name}</strong> to accept your pickup request.
+            Please note, the request will be auto-rejected in 150 seconds.</p>
         return (
             <div className="shopcards-details accepted-user-info">
-                <PendingTimer
-                    message={message}
+                <PendingTimer message={message}
                 />
             </div>
         )
@@ -136,6 +122,10 @@ const ActiveUsers = ({user_status}) => {
                             </tbody>
                         ))}
                     </table>
+                    {(!activeUsersDataContext || activeUsersDataContext.length===0) && (
+                        <div><h4>Oops!! There are no active users from your locality at the shop right now.</h4></div>
+                    )}
+
                 </div>
             </div>
 

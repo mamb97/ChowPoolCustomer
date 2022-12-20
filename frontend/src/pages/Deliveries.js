@@ -88,9 +88,10 @@ export const Deliveries = ({delivery_id}) => {
 
   return deliveryData && (
     <div className="orders">
+        <h4>Delivery History</h4>
       <div>
         {deliveryData && deliveryData["pending"].map((order) => (
-          <div className="shopcards-details" style={{background: "#ffffba"}}>
+          <div className="shopcards-details">
             <div className='flexbox-container'>
               <p><strong>{order.customer.name}</strong> is requesting to pickup the order.</p>
               <button onClick={ackRequest.bind(this, order.order_id, "accept")}>Accept</button>
@@ -110,7 +111,7 @@ export const Deliveries = ({delivery_id}) => {
       </div>
       <div>
         {deliveryData && deliveryData["accepted"].map((order) => (
-          <div className="shopcards-details" style={{background: "#bae1ff"}}>
+          <div className="shopcards-details">
             <DeliveryData key={order.order_id} order_data={order} />
             <div className='flexbox-container'>
               <p>Is the order delivered?</p>
@@ -122,7 +123,7 @@ export const Deliveries = ({delivery_id}) => {
       </div>
       <div>
         {deliveryData && deliveryData["completed"].map((order) => (
-          <div className="shopcards-details" style={{background: "#baffc9"}}>
+          <div className="shopcards-details">
             <DeliveryData key={order.order_id} order_data={order} />
              <Link className="btn btn-link" to={`/delivery/${order.order_id}`}>View Delivery Details</Link>
           </div>

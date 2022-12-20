@@ -10,6 +10,7 @@ const ordersSchema = new Schema({
     cust_address: {type: String, required: true},
     cust_lat: {type: Number, required: true},
     cust_long: {type: Number, required: true},
+    cust_opt_out_delivery: {type: Boolean, required: true},
     shop_id: {type: mongoose.Types.ObjectId, required: true},
     shop_name: {type: String, required: true},
     shop_phone: {type: Number, required: true},
@@ -27,7 +28,7 @@ const ordersSchema = new Schema({
 
 ordersSchema.statics.create_order = async function(custInfo, cust_address, shopInfo, confirmationID, orderInfo) {
     const createDict = {cust_id:custInfo._id, cust_name: custInfo.name, cust_phone: custInfo.phone,
-        cust_address: cust_address, cust_lat: custInfo.lat, cust_long: custInfo.long,
+        cust_address: cust_address, cust_lat: custInfo.lat, cust_long: custInfo.long, cust_opt_out_delivery: custInfo.delivery_optout,
         shop_id: mongoose.Types.ObjectId(shopInfo.shop_id), shop_name: shopInfo.shop_name, shop_phone: shopInfo.shop_phone,
         shop_address: shopInfo.shop_address,
         order_status: orderInfo.order_status, order_total: orderInfo.order_total, order_summary: JSON.stringify(orderInfo.order_summary),

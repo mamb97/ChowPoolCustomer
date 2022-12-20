@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 
 export const PendingTimer = ({message}) => {
-    const initialMinute = 2
+    const initialMinute = 0
     const initialSeconds = 30;
     const [ minutes, setMinutes ] = useState(initialMinute);
     const [seconds, setSeconds ] =  useState(initialSeconds);

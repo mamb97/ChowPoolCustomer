@@ -6,14 +6,16 @@ const OrderUsersTempMapping = require('../models/orderUsersTempMapping')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const getLatLong = require('../lib/geocoding')
-const {getNearbyShops, getNearbyActiveCustomersByShop} = require('../lib/nearbyPoints')
+const {getNearbyShops} = require('../lib/nearbyPoints')
 const Errors = require('../lib/errors')
-const {getRemainingDuration} = require('../lib/utility')
+const {isTimeOverLimit} = require('../lib/utility')
+const {isOrderNew, updateActiveUserEntries} = require("../lib/activeUsers");
 
 const createToken = (_id) => {
     return jwt.sign({_id}, process.env.SECRET, {expiresIn: '3d'})
 }
 
+//COMPLETED
 const addShopEntries = async (user_id, coordinates, delete_all = false) => {
     const shopData = await getNearbyShops(user_id, coordinates)
     if (!shopData)
@@ -27,7 +29,7 @@ const addShopEntries = async (user_id, coordinates, delete_all = false) => {
     console.log(shopData)
 }
 
-// login a user
+//COMPLETED
 const loginUser = async (req, res) => {
     const {email, password} = req.body
 
@@ -44,7 +46,7 @@ const loginUser = async (req, res) => {
     }
 }
 
-// signup a user - delivery_optout, payment_method
+//COMPLETED
 const signupUser = async (req, res) => {
     const {email, password, name, phone, unitNumber, streetAddress, city, state, zipcode, delivery_opt_out} = req.body
     try {
@@ -69,7 +71,7 @@ const signupUser = async (req, res) => {
     }
 }
 
-// get user account
+//COMPLETED
 const getAccount = async (req, res) => {
 
     const user_id = req.user._id
@@ -87,6 +89,7 @@ const getAccount = async (req, res) => {
     res.status(200).json(cust)
 }
 
+//COMPLETED
 const updateAccount = async (req, res) => {
     console.log(req.user._id, req.body)
     const {id} = req.user._id
@@ -113,60 +116,49 @@ const updateAccount = async (req, res) => {
     }
 }
 
+//COMPLETED
 const getActiveUsers = async (req, res) => {
-
     const order_id = req.params.order_id
-    const orderDetails = await Orders.findById(order_id)
-    // Don't return any customer list if the order_creation_date is more than 10 minutes from now.
-    // If order was created past 10 mins, don't show any active users
-    const remaining = getRemainingDuration(orderDetails.createdAt, 1000, 0)
-    if (remaining['mins'] === 0 && remaining['secs'] === 0) {
-        // await OrderUsersTempMapping.deleteMany({original_cust_order_id: order_id})
+    const orderDetails = await isOrderNew(order_id);
+    if(orderDetails) {
+        const active_users = await OrderUsersTempMapping.find({original_cust_order_id: order_id,
+            'status': 'new'})
+        res.status(200).json(active_users)
+    }
+    else {
         res.status(200).json([])
-        return
     }
-    // Find all users at the given shop with order_status = 'order_placed' && cust_id != current user id
-    // Also ensure already rejected users are not displayed in the list anymore.
-    let reject_cust_ids = await OrderUsersTempMapping.find({original_cust_order_id: order_id, status:'rejected'})
-    reject_cust_ids = reject_cust_ids.map(o=>o.delivery_cust_id)
-    const cust_id = req.user._id
-    const cust_orders = await Orders.find({
-        cust_id:  {$nin: [cust_id].concat(reject_cust_ids)},
-        order_status: 'order_placed',
-        shop_id: orderDetails.shop_id
-    })
-    // Filtering customers within 1000m radius
-    const active_orders = await getNearbyActiveCustomersByShop(cust_orders,
-        [orderDetails.cust_lat, orderDetails.cust_long])
-    let active_users = []
-    if(active_orders.length > 0){
-        // Filtering duplicate customer records because one customer could have placed multiple orders.
-        let seen = new Set()
-        active_orders.forEach(o => {
-            if(!seen.has(o.customer_id)){
-                seen.add(o.customer_id)
-                active_users.push({'original_cust_id': cust_id,
-                    'status': 'new', 'delivery_cust_id': o.customer_id,
-                'delivery_cust_name': o.customer_name, 'dist': o.dist,
-                'original_cust_order_id': order_id})
+}
+
+// TODO: SMS Pending
+const sendRequest = async (req, res) => {
+    const requested_date = new Date()
+    let user_data = await OrderUsersTempMapping.findOneAndUpdate(
+        {original_cust_order_id: req.body.original_cust_order_id, delivery_cust_id: req.body.delivery_cust_id},
+        {'status': 'pending', 'requested_date': requested_date}, {returnOriginal: false})
+
+    async function waitingForConfirmation() {
+        while (user_data.status === "pending") {
+            if (isTimeOverLimit(requested_date, 30)) {
+                user_data = await OrderUsersTempMapping.findOneAndUpdate({
+                    original_cust_order_id: req.body.original_cust_order_id,
+                    delivery_cust_id: req.body.delivery_cust_id
+                }, {'status': "rejected"}, {returnOriginal: false})
+            } else {
+                user_data = await OrderUsersTempMapping.findOne({
+                    original_cust_order_id: user_data.original_cust_order_id,
+                    delivery_cust_id: user_data.delivery_cust_id
+                })
             }
-        })
-        await OrderUsersTempMapping.insertMany(active_users)
+        }
     }
-    res.status(200).json(active_users)
+    await waitingForConfirmation();
+    if(user_data['status'] === "rejected"){
+        const orderInfo = await Orders.findById(req.body.original_cust_order_id)
+        await updateActiveUserEntries(orderInfo._id, orderInfo.cust_id, orderInfo.shop_id, orderInfo.cust_lat, orderInfo.cust_long)
+    }
+    res.status(200).json(user_data)
+    // TODO: Send SMS
 }
 
-const UserPickupStatus = async (req, res) => {
-    const customer_id = req.params.user_id
-    console.log("Customer ID " + customer_id)
-    await new Promise(resolve => setTimeout(resolve, 5000));
-
-    const user_status = {"customer_id": customer_id, "status": "rejected", "customer_name": "John Doe"}
-    res.status(200).json(user_status)
-}
-
-
-module.exports = {
-    signupUser, loginUser, updateAccount, getAccount,
-    getActiveUsers, UserPickupStatus
-}
+module.exports = {signupUser, loginUser, updateAccount, getAccount, getActiveUsers, sendRequest}

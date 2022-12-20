@@ -18,6 +18,7 @@ const isShopOpen = (open, close, openDays) => {
 
 }
 
+// COMPLETED
 const getShops = async (req, res) => {
     const customer_id = req.user._id
     // Returning shops list in ascending order of the distance
@@ -42,6 +43,7 @@ const getShops = async (req, res) => {
     }
 }
 
+// COMPLETED
 const getShopMenu = async (req, res) => {
     const shop_id = req.params.id
     const menu_info = await ShopMenu.find({shop_id: shop_id, availability: true})

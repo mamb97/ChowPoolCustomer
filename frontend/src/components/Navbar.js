@@ -2,11 +2,9 @@ import { Link } from 'react-router-dom'
 import { useLogout } from '../hooks/useLogout'
 import { useAuthContext } from '../hooks/useAuthContext'
 
-
 const Navbar = () => {
   const { logout } = useLogout()
   const { user } = useAuthContext()
-  
 
   const handleClick = () => {
     logout()
@@ -34,9 +32,9 @@ const Navbar = () => {
           )}
           {user && (
             <div>
-              <Link to="/account">Account</Link>
-              <Link to="/orders">Orders</Link>
-              
+              <Link to="/account"><img className="navbar-icon" style={{width:"30px", height:"30px"}} src="./profile.png" alt="Profile"/></Link>
+              <Link to="/orders"><img className="navbar-icon" src="./orders.png" alt="Orders"/></Link>
+              <Link to="/deliveries"><img className="navbar-icon" src="./del.png" alt="Deliveries"/></Link>
             </div>
           )}
         </nav>

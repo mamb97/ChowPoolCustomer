@@ -74,8 +74,8 @@ const OrderPlacement = x => {
                 </div>
                 <div>
                     <h4>Active Users!</h4>
-                    <Timer message="You could request any of the other users at the shop to pickup your order
-                    within 10 minutes." mins={10} sec={0}/>
+                    <Timer
+                        message="You have 10 minutes to send request to any of the other users at the shop to pickup your order." mins={10} sec={0}/>
                     <ActiveUsers/>
                 </div>
             </div>

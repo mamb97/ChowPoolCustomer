@@ -1,16 +1,10 @@
 const Customer = require('../models/account')
 const Orders = require('../models/order')
 const {getFormattedAddress, getRandomID} = require("../lib/utility");
+const mongoose = require("mongoose");
+const {createActiveUserEntries} = require("../lib/activeUsers");
 
-const states = {
-    "pending": {
-        "self_pickup_pending": "Pickup Pending",
-        "pickup_done": "Picked-Up",
-        "pickup_pending": "Pickup Pending"
-    },
-    "completed": {"self_pickup_done": "Pickup Complete", "order_delivered": "Order Delivered"}
-}
-
+// COMPLETED
 const createOrder = async (req, res) => {
     const user_id = req.user._id
     const confirmationID = await getRandomID();
@@ -18,7 +12,10 @@ const createOrder = async (req, res) => {
     const cust_address = await getFormattedAddress(cust_info.streetAddress, cust_info.unitNumber, cust_info.city,
         cust_info.state, cust_info.zipcode)
     const order_details = await Orders.create_order(cust_info, cust_address, req.body.shop_info, confirmationID,
-        {order_summary:req.body.order_summary, order_total: req.body.order_total, order_status: 'order_placed', delivery_type: 'self'})
+        {order_summary:req.body.order_summary, order_total: req.body.order_total, order_status: 'order_placed',
+            delivery_type: 'self'})
+    await createActiveUserEntries(order_details.orderID, user_id, mongoose.Types.ObjectId(req.body.shop_info.shop_id),
+        cust_info.lat, cust_info.long)
     res.status(200).json(order_details)
 }
 
@@ -120,8 +117,6 @@ const getOrderDetails = async (req, res) => {
     }
     res.status(200).json(d)
 }
-
-
 
 const postDeliveries = async (req, res) => {
     //If remainingDuration is 0, update delivery pickup request to rejected. 

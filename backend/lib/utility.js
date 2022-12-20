@@ -24,4 +24,18 @@ const getRemainingDuration = (startDate, mins, secs) => {
     return {'mins': remainingMins, 'secs': remainingSecs}
 }
 
-module.exports = {getRandomID, getFormattedAddress, getRemainingDuration}
+function isTimeOverLimit(givenTimeStr, limitInSecs) {
+    const currentTime = new Date();
+    const givenTime = Date.parse(givenTimeStr);
+
+    // Calculate the time difference in seconds
+    const timeDifference = (currentTime.getTime() - givenTime) / 1000;
+    return (timeDifference > limitInSecs)
+}
+
+function getNewDeadLineDateFromNow(secs){
+    const n = new Date()
+    return new Date(n.getTime() - (secs * 1000))
+}
+
+module.exports = {getRandomID, getFormattedAddress, getRemainingDuration, isTimeOverLimit, getNewDeadLineDateFromNow}

@@ -50,9 +50,10 @@ const Order = () => {
     return (
       <div className="orders">
         <div/>
+          <h4>Order History</h4>
         <div>
           {orders && orders["pending"].map((order) => (
-            <div className="shopcards-details" style={{background: "#fee1e8"}}>
+            <div className="shopcards-details">
               <OrderData key={order.order_id} order_data={order} />
               <Link className="btn btn-link" to={`/order/${order.order_id}`}>View Order Details</Link>
             </div>
@@ -60,7 +61,7 @@ const Order = () => {
         </div>
         <div>
           {orders && orders["completed"].map((order) => (
-            <div className="shopcards-details" style={{background: "#f6eac2"}}>
+            <div className="shopcards-details">
               <OrderData key={order.order_id} order_data={order} />
               <Link className="btn btn-link" to={`/order/${order.order_id}`}>View Order Details</Link>
             </div>
