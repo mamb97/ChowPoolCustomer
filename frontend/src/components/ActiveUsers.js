@@ -13,22 +13,6 @@ const ActiveUsers = () => {
     const [pendingUser, setPendingUser] = useState(false)
     const [isLoading, setIsLoading] = useState(null)
 
-
-    const updateOrder = async (delivery_customer) => {
-        const response = await fetch('/api/order/update_delivery_type', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${user.token}`},
-            body: JSON.stringify({
-                'order_confirmation_id': menuOrderDataContext["orderInfo"]["orderConfirmationID"],
-                'delivery': {
-                    'type': 'fellow_customer',
-                    'customer_details': delivery_customer
-                }
-            })
-        })
-        const json = await response.json()
-    }
-
     const sendRequest = async (new_cust_data) => {
         console.log('New Cust Data', new_cust_data)
         setIsLoading(true)
@@ -45,17 +29,17 @@ const ActiveUsers = () => {
             const res = await response.json()
 
             if (response.ok) {
+                console.log("Status", res["status"])
                 switch (res["status"]) {
                     case "accepted": {
                         setIsLoading(false)
-                        await setAcceptedUser(pendingUser)
+                        await setAcceptedUser(true)
                         await setPendingUser(false)
-                        await updateOrder(acceptedUser)
                         break
                     }
                     case "rejected": {
                         setIsLoading(false)
-                        window.alert("Oops!! " + pendingUser["delivery_cust_name"] + " has rejected your pickup request.")
+                        // window.alert("Oops!! " + pendingUser["delivery_cust_name"] + " has rejected your pickup request.")
                         await setPendingUser(false)
                         break
                     }

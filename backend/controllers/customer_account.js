@@ -139,7 +139,7 @@ const sendRequest = async (req, res) => {
 
     async function waitingForConfirmation() {
         while (user_data.status === "pending") {
-            if (isTimeOverLimit(requested_date, 30)) {
+            if (isTimeOverLimit(requested_date, 150)) {
                 user_data = await OrderUsersTempMapping.findOneAndUpdate({
                     original_cust_order_id: req.body.original_cust_order_id,
                     delivery_cust_id: req.body.delivery_cust_id

@@ -31,10 +31,11 @@ const Navbar = () => {
             </div>
           )}
           {user && (
-            <div>
-              <Link to="/account"><img className="navbar-icon" style={{width:"30px", height:"30px"}} src="./profile.png" alt="Profile"/></Link>
-              <Link to="/orders"><img className="navbar-icon" src="./orders.png" alt="Orders"/></Link>
-              <Link to="/deliveries"><img className="navbar-icon" src="./del.png" alt="Deliveries"/></Link>
+            <div >
+              <Link to="/account"><button >Profile</button></Link>
+              {/*<Link to="/orders"><img className="navbar-icon" src="./orders.png" alt="Orders"/></Link>*/}
+              <Link to="/pending-deliveries"><button>Pending Deliveries</button></Link>
+              <Link to="/pickup-requests"><button>Pickup Requests</button></Link>
             </div>
           )}
         </nav>

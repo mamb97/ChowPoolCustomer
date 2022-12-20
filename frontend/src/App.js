@@ -9,9 +9,9 @@ import Signup from './pages/Signup'
 import Account from './pages/Account'
 import Order from './pages/Order'
 import OrderDetails from './pages/OrderDetails'; 
-import {Deliveries, DeliveryDetails} from './pages/Deliveries';
-
+import {Delivery} from './pages/Delivery';
 import NavbarComp from './components/Navbar';
+import {Pickup} from "./pages/Pickup";
 
 
 function App() {
@@ -50,14 +50,22 @@ function App() {
               path="/order/:id" 
               element={user ? <OrderDetails /> : <Navigate to="/login" />} 
             />
-            <Route 
-              path="/deliveries" 
-              element={user ? <Deliveries /> : <Navigate to="/login" />} 
+            <Route
+                path="/pending-deliveries"
+                element={user ? <Delivery /> : <Navigate to="/login" />}
             />
-            <Route 
-              path="/delivery/:id" 
-              element={user ? <DeliveryDetails /> : <Navigate to="/login" />} 
+            <Route
+                path="/pickup-requests"
+                element={user ? <Pickup /> : <Navigate to="/login" />}
             />
+            {/*<Route */}
+            {/*  path="/deliveries" */}
+            {/*  element={user ? <Deliveries /> : <Navigate to="/login" />} */}
+            {/*/>*/}
+            {/*<Route */}
+            {/*  path="/delivery/:id" */}
+            {/*  element={user ? <DeliveryDetails /> : <Navigate to="/login" />} */}
+            {/*/>*/}
           </Routes>
         </div>
       </BrowserRouter>
