@@ -1,7 +1,7 @@
 const express = require('express')
 
 // controller functions
-const {sendSMSMessage} = require('../controllers/notification_handler')
+// const {sendSMSMessage} = require('../controllers/notification_handler')
 const {getShops, getShopMenu} = require('../controllers/customer_menu')
 const {updateAccount, getAccount, getActiveUsers, sendRequest} = require('../controllers/customer_account')
 const {getOrders, getOrderDetails, createOrder, updateOrderStatus, getPendingRequests, getPendingDeliveries,
@@ -35,6 +35,6 @@ router.post('/delivery/status', updateOrderStatus)
 router.get('/orders', getOrders)
 router.get('/order/:id', getOrderDetails)
 
-router.post('/send/sms', sendSMSMessage)
+// router.post('/send/sms', sendSMSMessage)
 
 module.exports = router

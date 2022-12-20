@@ -138,8 +138,8 @@ const sendRequest = async (req, res) => {
         {original_cust_order_id: req.body.original_cust_order_id, delivery_cust_id: req.body.delivery_cust_id},
         {'status': 'pending', 'requested_date': requested_date}, {returnOriginal: false})
 
-    sendCustomerSMS(req.body.delivery_cust_id, "Hello! Would like to pickup another user's order? " +
-        "If yes, please onto ChowPool website and accept the request. For every successful delivery, you'll receive $1.00")
+    // sendCustomerSMS(req.body.delivery_cust_id, "Hello! Would like to pickup another user's order? " +
+    //     "If yes, please onto ChowPool website and accept the request. For every successful delivery, you'll receive $1.00")
 
     async function waitingForConfirmation() {
         while (user_data.status === "pending") {

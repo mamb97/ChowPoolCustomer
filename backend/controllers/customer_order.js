@@ -21,7 +21,7 @@ const createOrder = async (req, res) => {
         })
     await createActiveUserEntries(order_details.orderID, user_id, mongoose.Types.ObjectId(req.body.shop_info.shop_id),
         cust_info.lat, cust_info.long)
-    sendShopSMS(req.body.shop_info.phone, "Hello! You've received a new order. Please log into ChowPool website and goto Orders page for details.")
+    // sendShopSMS(req.body.shop_info.shop_phone, "Hello! You've received a new order. Please log into ChowPool website and goto Orders page for details.")
     res.status(200).json(order_details)
 }
 

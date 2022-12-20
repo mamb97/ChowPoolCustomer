@@ -2,14 +2,14 @@ const {sendSMSMessage} = require("../controllers/notification_handler")
 const Customer = require('../models/account')
 const Shop = require('../models/shop')
 
-const sendCustomerSMS = async (to_cust_id, message) => {
+async function sendCustomerSMS(to_cust_id, message) {
     const custData = Customer.findById(to_cust_id)
     sendSMSMessage(custData.phone, message)
 }
 
-const sendShopSMS = async (shop_id, message) => {
-    const shopData = await Shop.findById(shop_id)
-    sendSMSMessage(shopData.phone, message)
+async function sendShopSMS(phone, message) {
+    //const shopData = await Shop.findById(shop_id)
+    sendSMSMessage(phone, message)
 }
 
-module.export = {sendCustomerSMS, sendShopSMS}
+module.exports = {sendCustomerSMS, sendShopSMS}

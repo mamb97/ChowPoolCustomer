@@ -1,8 +1,10 @@
+require('dotenv').config()
 // SMS notification handler
-const service_url = process.env.SMS_SERVICE_URL
+const Customer = require('../models/account')
 const sendSMSMessage = async (number, message) => {
+
     if(number && message){
-        const response = await fetch(`${service_url}/text`, {
+        const response = await fetch('http://localhost:3008/text', {
             headers: {'Authorization': `Bearer ${user.token}`,
                 'Content-Type': 'application/json'},
             method: 'POST',

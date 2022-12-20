@@ -4,7 +4,8 @@ const {getNewDeadLineDateFromNow, getRemainingDuration, isTimeOverLimit} = requi
 const {getNearbyActiveCustomersByShop} = require("./nearbyPoints");
 
 async function isOrderNew(order_id) {
-    const o = await Orders.findOne({_id: order_id, createdAt: {$gte: getNewDeadLineDateFromNow(10 * 60)}});
+    // THIS VALUE SHOULD BE 10 BUT CHANGED IT TO 3 FOR DEMO PURPOSES
+    const o = await Orders.findOne({_id: order_id, createdAt: {$gte: getNewDeadLineDateFromNow(3 * 60)}});
     return (o && o._id);
 }
 
