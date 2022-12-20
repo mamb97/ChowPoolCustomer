@@ -10,6 +10,8 @@ const {getNearbyShops} = require('../lib/nearbyPoints')
 const Errors = require('../lib/errors')
 const {isTimeOverLimit} = require('../lib/utility')
 const {isOrderNew, updateActiveUserEntries} = require("../lib/activeUsers");
+const {sendSMSMessage} = require("./notification_handler");
+const {sendCustomerSMS} = require("../lib/sms");
 
 const createToken = (_id) => {
     return jwt.sign({_id}, process.env.SECRET, {expiresIn: '3d'})
@@ -130,12 +132,14 @@ const getActiveUsers = async (req, res) => {
     }
 }
 
-// TODO: SMS Pending
 const sendRequest = async (req, res) => {
     const requested_date = new Date()
     let user_data = await OrderUsersTempMapping.findOneAndUpdate(
         {original_cust_order_id: req.body.original_cust_order_id, delivery_cust_id: req.body.delivery_cust_id},
         {'status': 'pending', 'requested_date': requested_date}, {returnOriginal: false})
+
+    sendCustomerSMS(req.body.delivery_cust_id, "Hello! Would like to pickup another user's order? " +
+        "If yes, please onto ChowPool website and accept the request. For every successful delivery, you'll receive $1.00")
 
     async function waitingForConfirmation() {
         while (user_data.status === "pending") {
@@ -158,7 +162,6 @@ const sendRequest = async (req, res) => {
         await updateActiveUserEntries(orderInfo._id, orderInfo.cust_id, orderInfo.shop_id, orderInfo.cust_lat, orderInfo.cust_long)
     }
     res.status(200).json(user_data)
-    // TODO: Send SMS
 }
 
 module.exports = {signupUser, loginUser, updateAccount, getAccount, getActiveUsers, sendRequest}

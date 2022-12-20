@@ -17,10 +17,10 @@ const OrderData = ({order_data}) => {
                 <p><strong>Cust Name: </strong>{order_data.cust_name}</p>
                 <p><strong>Cust Phone: </strong>${order_data.cust_phone}</p>
             </div>
-            {order_data.delivery &&
+            {order_data.delivery_name &&
                 (<div className="flexbox-container col-two">
-                    <p><strong>Delivery Person: </strong>{order_data.delivery.name}</p>
-                    <p><strong>Contact Phone: </strong>{order_data.delivery.phone}</p>
+                    <p><strong>Delivery Person: </strong>{order_data.delivery_name}</p>
+                    <p><strong>Contact Phone: </strong>{order_data.delivery_name}</p>
                 </div>) ||
                 (<p className="flexbox-container"><strong>Delivery Type: </strong>Self pick-up</p>)}
         </div>
@@ -35,9 +35,10 @@ const Order = () => {
     const updateOrderStatus = (order_id) => {
         const updateOrder = async () => {
             const response = await fetch('/api/shop/order/update_status', {
-                headers: {'Authorization': `Bearer ${user.token}`},
+                headers: {'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'},
                 method: 'POST',
-                body: JSON.stringify({order_id, 'status': 'order_delivered'})
+                body: JSON.stringify({order_id})
             })
             const json = await response.json()
         }

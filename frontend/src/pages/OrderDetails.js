@@ -20,7 +20,7 @@ const OrderDetails = () => {
                         <p><strong>Order Status: </strong>{order_data.order_status}</p>
                         <p><strong>Shop Name: </strong>{order_data.shop_name}</p>
                         <p><strong>Order Total: </strong>${order_data.order_total}</p>
-                        {order_data.delivery && 
+                        {order_data.delivery_name &&
                             (<div>
                             <p><strong>Delivery Person: </strong>{order_data.delivery_name}</p>
                             <p><strong>Contact Phone: </strong>{order_data.delivery_phone}</p>

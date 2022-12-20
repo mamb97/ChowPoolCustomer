@@ -5,6 +5,7 @@ const OrderUsersTempMapping = require('../models/orderUsersTempMapping')
 const {getFormattedAddress, getRandomID, getNewDeadLineDateFromNow, getRemainingDuration} = require("../lib/utility");
 const mongoose = require("mongoose");
 const {createActiveUserEntries} = require("../lib/activeUsers");
+const {sendShopSMS} = require("../lib/sms");
 
 // COMPLETED
 const createOrder = async (req, res) => {
@@ -20,6 +21,7 @@ const createOrder = async (req, res) => {
         })
     await createActiveUserEntries(order_details.orderID, user_id, mongoose.Types.ObjectId(req.body.shop_info.shop_id),
         cust_info.lat, cust_info.long)
+    sendShopSMS(req.body.shop_info.phone, "Hello! You've received a new order. Please log into ChowPool website and goto Orders page for details.")
     res.status(200).json(order_details)
 }
 
@@ -55,9 +57,9 @@ const getOrders = async (req, res) => {
         "pending": [],
         "completed": []
     }
-    const pendingOrders = await Orders.find({cust_id: req.user._id, status: {$ne: 'order_complete'}})
+    const pendingOrders = await Orders.find({cust_id: req.user._id, order_status: {$ne: 'order_complete'}})
     orders["pending"] = getOrderDict(pendingOrders);
-    const completedOrders = await Orders.find({cust_id: req.user._id, status: 'order_complete'})
+    const completedOrders = await Orders.find({cust_id: req.user._id, order_status: 'order_complete'})
     orders["completed"] = getOrderDict(completedOrders);
     res.status(200).json(orders)
 }

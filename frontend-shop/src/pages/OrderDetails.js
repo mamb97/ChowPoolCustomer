@@ -2,18 +2,6 @@ import {useEffect, useState} from 'react'
 import {useAuthContext} from "../hooks/useAuthContext"
 import {useParams} from 'react-router-dom'
 
-const orderSummaryFormatting = (os) => {
-    const updated_os = []
-    console.log("OS:", os)
-    for (let i in os) {
-        updated_os.push({
-            'name': os[i]['item_name'],
-            'price': `\$ ${os[i]['item_price']} x ${os[i]['qty']}`,
-            'total': `\$ ${os[i]['item_cost']}`
-        })
-    }
-    return updated_os
-}
 const OrderDetails = () => {
     const {user} = useAuthContext()
     const [orderData, setOrderData] = useState(null)
@@ -44,14 +32,14 @@ const OrderDetails = () => {
                                 <td><strong>Customer Phone: </strong></td>
                                 <td>{order_data.cust_phone}</td>
                             </tr>
-                            {order_data.delivery && (
+                            {order_data.delivery_name && (
                                 <tr>
                                     <td><strong>Delivery Person: </strong></td>
-                                    <td>{order_data.delivery.name}</td>
+                                    <td>{order_data.delivery_name}</td>
                                 </tr>)}
-                            {order_data.delivery && (<tr>
+                            {order_data.delivery_name && (<tr>
                                 <td><strong>Contact Phone: </strong></td>
-                                <td>{order_data.delivery.phone}</td>
+                                <td>{order_data.delivery_phone}</td>
                             </tr>)}
                             </tbody>
                         </table>
