@@ -73,7 +73,7 @@ const ActiveUsers = () => {
     if (acceptedUser) {
         return (
             <div className="shopcards-details accepted-user-info">
-                <p><strong>{acceptedUser.customer_name}</strong> has accepted your request to pickup the order.</p>
+                <p>Your order pickup request has been accepted. Goto Orders page to track your order</p>
             </div>
         )
     } else if (pendingUser) {

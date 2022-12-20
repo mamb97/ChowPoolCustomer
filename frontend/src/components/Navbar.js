@@ -33,8 +33,8 @@ const Navbar = () => {
           {user && (
             <div >
               <Link to="/account"><button >Profile</button></Link>
-              {/*<Link to="/orders"><img className="navbar-icon" src="./orders.png" alt="Orders"/></Link>*/}
-              <Link to="/pending-deliveries"><button>Pending Deliveries</button></Link>
+              <Link to="/orders"><button>Orders</button></Link>
+              <Link to="/pending-deliveries"><button>Deliveries</button></Link>
               <Link to="/pickup-requests"><button>Pickup Requests</button></Link>
             </div>
           )}

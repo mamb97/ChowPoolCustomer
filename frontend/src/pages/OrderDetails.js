@@ -22,8 +22,8 @@ const OrderDetails = () => {
                         <p><strong>Order Total: </strong>${order_data.order_total}</p>
                         {order_data.delivery && 
                             (<div>
-                            <p><strong>Delivery Person: </strong>{order_data.delivery.name}</p>
-                            <p><strong>Contact Phone: </strong>{order_data.delivery.phone}</p>
+                            <p><strong>Delivery Person: </strong>{order_data.delivery_name}</p>
+                            <p><strong>Contact Phone: </strong>{order_data.delivery_phone}</p>
                             </div>) ||
                             (<p className="flexbox-container"><strong>Delivery Type: </strong>Self pick-up</p>)}
                     </div>

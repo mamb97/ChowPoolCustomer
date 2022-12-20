@@ -21,16 +21,16 @@ export const Delivery = () => {
         if(user){
             fetchDeliveries()
         }
-    }, [dispatch, user])
-
+    }, [dispatch, postDeliveries, user])
+    console.log(postDeliveries)
     return (
         <div>
-            <p><strong> Pending Deliveries </strong></p>
+            <p><strong> Orders that need to be Delivered </strong></p>
             <p><i>For every successfully delivery <strong>$1.00</strong> will be transferred to your payment method.</i></p>
             <div className="delivery-pending">
                 {postDeliveries && postDeliveries.map((p) => (
                     <PendingDeliveries data={p} />
-                )) || (<h4>Yay! No deliveries pending</h4>)}
+                ))}
 
             </div>
         </div>

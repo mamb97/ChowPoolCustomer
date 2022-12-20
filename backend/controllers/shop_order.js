@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
+const Orders = require('../models/order')
+
 
 const getShopOrders = async (req, res) => {
     console.log("GET SHOP ORDER CALL")
@@ -109,7 +111,16 @@ const getShopOrderDetails = async (req, res) => {
 
 const updateShopOrderStatus = async (req, res) => {
 
-    // Update the order status either "order_delivered"
+    const order_data = Orders.findOne({order_confirmation_id: req.body.order_confirmation_id})
+    if(order_data.order_delivery_type === "self"){
+        await Orders.findByIdAndUpdate(order_data._id, {status: 'order_complete'})
+    }
+    else{
+        await Orders.findByIdAndUpdate(order_data._id, {status: 'order_picked-up'})
+    }
+
+    // TODO: Send SMS
+    res.status(200).json(req.body)
 
 }
 

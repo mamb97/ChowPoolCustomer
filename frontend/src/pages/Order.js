@@ -15,12 +15,12 @@ const OrderData = ({order_data}) => {
                 <p><strong>Shop Name: </strong>{order_data.shop_name}</p>
                 <p><strong>Order Total: </strong>${order_data.order_total}</p>
             </div>
-            {order_data.delivery && 
+            {order_data.delivery &&
             (<div className="flexbox-container col-two">
-             <p><strong>Delivery Person: </strong>{order_data.delivery.name}</p>
-             <p><strong>Contact Phone: </strong>{order_data.delivery.phone}</p>
+             <p><strong>Delivery Person: </strong>{order_data.delivery_name}</p>
+             <p><strong>Contact Phone: </strong>{order_data.delivery_phone}</p>
              </div>) ||
-            (<p className="flexbox-container"><strong>Delivery Type: </strong>Self pick-up</p>)}
+            (<p className="flexbox-container"><strong>Delivery Type: </strong> Self pick-up</p>)}
         </div>
     )
     

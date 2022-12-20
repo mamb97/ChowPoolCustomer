@@ -30,7 +30,7 @@ export const Pickup = () => {
                     <p><i>Please note, the requests will be auto-rejected in 180 seconds.</i></p>
                     {postDeliveries  && postDeliveries.map((p) => (
                         <PickupRequests data={p} />
-                    )) || (<h4>Yay! No pickup requests</h4>)}
+                    )) }
 
                 </div>
 
