@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { WorkoutsContextProvider } from './context/WorkoutContext'
+import { ShopsContextProvider } from './context/ShopContext'
 import { AuthContextProvider } from './context/AuthContext'
 import { ActiveUserContextProvider} from './context/ActiveUserContext'
 import { OrdersContextProvider } from './context/OrdersContext'
@@ -11,13 +11,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <AuthContextProvider>
-      <WorkoutsContextProvider>
+      <ShopsContextProvider>
         <ActiveUserContextProvider>
           <OrdersContextProvider>
             <App />
           </OrdersContextProvider>
         </ActiveUserContextProvider>
-      </WorkoutsContextProvider>
+      </ShopsContextProvider>
     </AuthContextProvider>
   </React.StrictMode>
 );

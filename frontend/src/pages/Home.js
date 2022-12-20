@@ -1,5 +1,5 @@
 import { useEffect, useState }from 'react'
-import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
+import { useShopsContext } from "../hooks/useShopsContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
 import ShopMenu from '../components/ShopMenu'
@@ -32,7 +32,7 @@ const ShopNotAvailable = () => {
 }
 
 const Home = () => {
-  const {shops, dispatch} = useWorkoutsContext()
+  const {shops, dispatch} = useShopsContext()
   const {user} = useAuthContext()
   const [shopid, setShopId] = useState(null)
 

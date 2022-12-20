@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react"
-import {useWorkoutsContext} from '../hooks/useWorkoutsContext'
+import {useShopsContext} from '../hooks/useShopsContext'
 import {useAuthContext} from '../hooks/useAuthContext'
 import {Link} from 'react-router-dom'
 
@@ -9,7 +9,7 @@ import {Timer} from '../hooks/useTimer'
 
 const OrderPlacement = x => {
     const {user} = useAuthContext()
-    const {menuOrderDataContext, dispatch} = useWorkoutsContext()
+    const {menuOrderDataContext, dispatch} = useShopsContext()
     const [showActiveUsers, setShowActiveUsers] = useState(false)
     const [orderTotal, setOrderTotal] = useState(0)
     const [orderConfirmationID, setOrderConfirmationID] = useState('')

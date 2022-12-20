@@ -6,7 +6,7 @@ const {getShopAccount, updateShopAccount} = require('../controllers/shop_account
 const {createShopMenu, deleteShopMenu, getShopMenuData} = require('../controllers/shop_menu')
 const {getShopOrders, getShopOrderDetails, updateShopOrderStatus} = require('../controllers/shop_order')
 
-// require auth for all workout routes
+
 router.use(requireShopAuth)
 
 router.get('/shop/account', getShopAccount)

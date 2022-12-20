@@ -1,14 +1,13 @@
 import {useState, useEffect} from "react"
 
-import {useWorkoutsContext} from '../hooks/useWorkoutsContext'
+import {useShopsContext} from '../hooks/useShopsContext'
 import {useActiveUserContext} from '../hooks/useActiveUserContext'
 import {useAuthContext} from '../hooks/useAuthContext'
-import {Timer} from '../hooks/useTimer'
 import {PendingTimer} from '../hooks/usePendingTimer';
 
 const ActiveUsers = () => {
     const {user} = useAuthContext()
-    const {menuOrderDataContext} = useWorkoutsContext()
+    const {menuOrderDataContext} = useShopsContext()
     const {activeUsersDataContext, dispatch} = useActiveUserContext()
     const [acceptedUser, setAcceptedUser] = useState(false)
     const [pendingUser, setPendingUser] = useState(false)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
+import { useShopsContext } from '../hooks/useShopsContext'
 import { useAuthContext } from '../hooks/useAuthContext'
 import OrderPlacement from "./OrderPlacement"
 
@@ -8,7 +8,7 @@ const ShopMenu = ({shop_id}) => {
   const {user} = useAuthContext()
   const [showPlaceOrder, setShowPlaceOrder] = useState(false)
   const [shopData, setShopData] = useState('')
-  const {menuOrderDataContext, dispatch} = useWorkoutsContext()
+  const {menuOrderDataContext, dispatch} = useShopsContext()
 
 
   useEffect(() => {
